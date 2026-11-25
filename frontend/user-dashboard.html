@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Dashboard - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- LEFT SIDEBAR (Matches Photo 19) -->
+    <aside class="dash-sidebar">
+      <div class="dash-sidebar-header">
+        <div class="brand-icon" style="width: 36px; height: 36px; font-size: 1rem;">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+        <div class="brand-text">
+          <h2>HealthWay</h2>
+          <span>Patient Portal</span>
+        </div>
+      </div>
+
+      <ul class="dash-nav">
+        <li class="dash-nav-item">
+          <a class="dash-nav-link active" onclick="switchDashTab('pane-overview', this)">
+            <i class="fas fa-th-large"></i> Dashboard
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="locations.html" class="dash-nav-link">
+            <i class="fas fa-map-marked-alt"></i> Find Locations
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-camps', this)">
+            <i class="fas fa-calendar-check"></i> My Health Camps
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-favorites', this)">
+            <i class="fas fa-heart"></i> Saved Locations
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-feedback', this)">
+            <i class="fas fa-comment-medical"></i> My Feedback
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="notifications.html" class="dash-nav-link">
+            <i class="fas fa-bell"></i> Notifications
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="hospital-info.html" class="dash-nav-link">
+            <i class="fas fa-info-circle"></i> Hospital Guide
+          </a>
+        </li>
+      </ul>
+
+      <div class="dash-sidebar-footer">
+        <div class="dash-user-card">
+          <div class="avatar" id="sidebar-avatar">A</div>
+          <div class="info">
+            <div class="name" id="sidebar-user-name">Alex Carter</div>
+            <div class="role-pill">Registered Patient</div>
+          </div>
+        </div>
+        <button onclick="auth.logout()" class="btn btn-outline btn-sm btn-block" style="color: white; border-color: rgba(255,255,255,0.2);">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN BODY -->
+    <main class="dash-main">
+      <!-- Topbar (Matches Photo 19) -->
+      <header class="dash-topbar">
+        <div class="dash-topbar-search">
+          <i class="fas fa-search" style="color: var(--text-light);"></i>
+          <input type="text" placeholder="Search health records, hospital facilities...">
+        </div>
+
+        <div class="dash-topbar-actions">
+          <a href="notifications.html" class="topbar-icon-btn" title="Notifications">
+            <i class="far fa-bell"></i>
+            <span class="topbar-badge">3</span>
+          </a>
+          <a href="feedback.html" class="topbar-icon-btn" title="Feedback">
+            <i class="far fa-comment-dots"></i>
+          </a>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="avatar-circle" id="topbar-avatar" style="width: 38px; height: 38px;">A</div>
+            <span id="topbar-user-name" style="font-weight: 700; font-size: 0.95rem; color: #0b2545;">Alex Carter</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <div class="dash-content">
+        
+        <!-- PANE: OVERVIEW (Matches Photo 19) -->
+        <div id="pane-overview" class="dash-tab-pane active">
+          <!-- Welcome Banner -->
+          <div class="dash-welcome-banner" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <h2 id="user-greeting-name">Welcome back, Alex Carter!</h2>
+              <p>Patient ID: HW-2026-983 &bull; Digital Healthcare & Navigation Profile</p>
+              
+              <div class="patient-vital-strip" style="margin-top: 14px;">
+                <span><strong>Blood Group:</strong> <span id="vital-blood">O+</span></span>
+                <span>&bull;</span>
+                <span><strong>Age:</strong> <span id="vital-age">35 Yrs</span></span>
+                <span>&bull;</span>
+                <span><strong>Height:</strong> <span id="vital-height">178 cm</span></span>
+                <span>&bull;</span>
+                <span><strong>Weight:</strong> <span id="vital-weight">74 kg</span></span>
+              </div>
+            </div>
+            <button onclick="openEditProfileModal()" class="btn btn-outline btn-sm" style="color: white; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.12); margin-top: 6px;">
+              <i class="fas fa-user-edit"></i> Edit Profile & Health Info
+            </button>
+          </div>
+
+          <!-- Quick Metrics & Patient Details Row -->
+          <div class="dash-metrics-grid">
+            <div class="dash-metric-card" style="cursor: pointer;" onclick="openEditProfileModal()" title="Click to update blood group & age">
+              <div class="metric-data">
+                <h4>Blood Group & Age</h4>
+                <div class="value"><span id="card-blood">O+</span> <span id="card-age" style="font-size: 1rem; font-weight: 500; color: var(--text-muted);">&bull; 35 Yrs</span></div>
+              </div>
+              <div class="metric-icon-wrap metric-icon-blue"><i class="fas fa-tint"></i></div>
+            </div>
+
+            <div class="dash-metric-card" style="cursor: pointer;" onclick="openEditProfileModal()" title="Click to update height & weight">
+              <div class="metric-data">
+                <h4>Height & Weight</h4>
+                <div class="value"><span id="card-height">178</span> <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-muted);">cm</span> &bull; <span id="card-weight">74</span> <span style="font-size: 0.95rem; font-weight: 500; color: var(--text-muted);">kg</span></div>
+              </div>
+              <div class="metric-icon-wrap metric-icon-green"><i class="fas fa-weight"></i></div>
+            </div>
+
+            <div class="dash-metric-card" style="cursor: pointer;" onclick="switchDashTab('pane-camps')" title="View your camp bookings">
+              <div class="metric-data">
+                <h4>Camp Bookings</h4>
+                <div class="value" id="card-camp-count">2 <span style="font-size: 0.85rem; font-weight: 600; color: var(--primary);">Active</span></div>
+              </div>
+              <div class="metric-icon-wrap metric-icon-purple"><i class="fas fa-calendar-check"></i></div>
+            </div>
+
+            <div class="dash-metric-card" style="cursor: pointer;" onclick="switchDashTab('pane-favorites')" title="View saved hospital departments">
+              <div class="metric-data">
+                <h4>Saved Locations</h4>
+                <div class="value" id="card-fav-count">3 <span style="font-size: 0.85rem; font-weight: 600; color: #f59e0b;">Saved</span></div>
+              </div>
+              <div class="metric-icon-wrap metric-icon-amber"><i class="fas fa-bookmark"></i></div>
+            </div>
+          </div>
+
+          <!-- Split Content Grid: My Registered Camps & Favorites -->
+          <div style="display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 24px; align-items: start;">
+            
+            <!-- Registered Medical Camps List -->
+            <div class="card" style="padding: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="color: #0b2545; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-calendar-alt" style="color: var(--primary);"></i> My Registered Medical Camps
+                </h3>
+                <a href="medical-camps.html" class="btn btn-outline btn-sm">+ Register New</a>
+              </div>
+              
+              <div id="user-camp-registrations">
+                <!-- Loaded dynamically by dashboard.js -->
+              </div>
+            </div>
+
+            <!-- Saved Favorite Hospital Locations -->
+            <div>
+              <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                <h3 style="color: #0b2545; font-size: 1.15rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-heart" style="color: #ef4444;"></i> Saved Bookmarks
+                </h3>
+                <div id="user-favorite-locations">
+                  <!-- Loaded dynamically by dashboard.js -->
+                </div>
+              </div>
+
+              <!-- Recent Feedback Status -->
+              <div class="card" style="padding: 24px;">
+                <h3 style="color: #0b2545; font-size: 1.15rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-comment-dots" style="color: #0284c7;"></i> Recent Feedback Status
+                </h3>
+                <div id="user-recent-feedback">
+                  <!-- Loaded dynamically by dashboard.js -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- PANE: MY HEALTH CAMPS -->
+        <div id="pane-camps" class="dash-tab-pane">
+          <div class="card" style="padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2 style="color: #0b2545;">All Registered Medical Camps</h2>
+              <a href="medical-camps.html" class="btn btn-primary btn-sm">+ Browse & Register New Camps</a>
+            </div>
+            <div id="user-all-camps-list">
+              <!-- Handled in dashboard.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE: FAVORITES -->
+        <div id="pane-favorites" class="dash-tab-pane">
+          <div class="card" style="padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <div>
+                <h2 style="color: #0b2545;">Bookmarked Hospital Departments</h2>
+                <p style="color: var(--text-muted); margin-top: 4px;">Quickly navigate to your regularly visited hospital units.</p>
+              </div>
+              <a href="locations.html" class="btn btn-primary btn-sm">Explore All Hospital Locations</a>
+            </div>
+            <div id="user-favorite-locations-full" class="grid-2" style="margin-top: 20px;">
+              <!-- Loaded dynamically by dashboard.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE: FEEDBACK -->
+        <div id="pane-feedback" class="dash-tab-pane">
+          <div class="card" style="padding: 28px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+              <h2 style="color: #0b2545;">My Submitted Feedback & Staff Responses</h2>
+              <a href="feedback.html" class="btn btn-primary btn-sm">+ Submit New Feedback</a>
+            </div>
+            <div id="user-full-feedback-history"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==========================================
+       MODAL: EDIT PATIENT PROFILE & HEALTH DETAILS
+       ========================================== -->
+  <div id="user-edit-profile-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-user-edit" style="color: var(--primary);"></i> Edit Profile & Health Info</h3>
+        <button onclick="closeModal('user-edit-profile-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" id="edit-user-fullname" class="form-control" placeholder="E.g. Alex Carter" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input type="text" id="edit-user-phone" class="form-control" placeholder="+94 77 123 4567">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Blood Group *</label>
+            <select id="edit-user-blood" class="form-control">
+              <option value="O+">O Positive (O+)</option>
+              <option value="O-">O Negative (O-)</option>
+              <option value="A+">A Positive (A+)</option>
+              <option value="A-">A Negative (A-)</option>
+              <option value="B+">B Positive (B+)</option>
+              <option value="B-">B Negative (B-)</option>
+              <option value="AB+">AB Positive (AB+)</option>
+              <option value="AB-">AB Negative (AB-)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Age (Years) *</label>
+            <input type="number" id="edit-user-age" class="form-control" min="1" max="120" placeholder="35" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Height (cm) *</label>
+            <input type="number" id="edit-user-height" class="form-control" min="30" max="250" placeholder="178" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Weight (kg) *</label>
+            <input type="number" id="edit-user-weight" class="form-control" min="2" max="300" placeholder="74" required>
+          </div>
+        </div>
+
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 6px;">
+          <i class="fas fa-shield-alt" style="color: var(--primary);"></i> Your profile and health details are securely saved and will automatically display in your personal patient dashboard.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('user-edit-profile-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitEditProfile()" class="btn btn-primary btn-sm">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

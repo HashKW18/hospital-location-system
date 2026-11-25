@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Feedback - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-heartbeat fa-lg"></i>
+        </div>
+        <div class="brand-text">
+          <h1>HealthWay Hospital</h1>
+          <span>Care &bull; Locate &bull; Heal</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="locations.html" class="nav-link"><i class="fas fa-map-marker-alt"></i> Find Locations</a></li>
+        <li><a href="hospital-info.html" class="nav-link"><i class="fas fa-info-circle"></i> Hospital Information</a></li>
+        <li><a href="medical-camps.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Medical Camps</a></li>
+        <li><a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="feedback.html" class="nav-link active"><i class="fas fa-comment-medical"></i> Feedback</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-actions"></div>
+    </div>
+  </nav>
+
+  <!-- Header Banner (Matches Photo 30) -->
+  <section class="hero-section" style="padding: 40px 0 30px 0;">
+    <div class="container">
+      <h1 style="font-size: 2.6rem; margin-bottom: 8px;">Patient Feedback</h1>
+      <p style="font-size: 1.1rem; color: var(--text-secondary); max-width: 600px;">
+        We value your experience. Tell us about your visit, report difficulties finding departments, or suggest improvements so we can do better.
+      </p>
+    </div>
+  </section>
+
+  <!-- Form Layout (Matches Photo 30) -->
+  <main class="container section-padding">
+    <div style="display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 32px; align-items: start;">
+      
+      <!-- Feedback Form Card (Matches Photo 30 Left) -->
+      <div class="card" style="padding: 32px;">
+        <h2 style="color: #0b2545; font-size: 1.4rem; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+          Feedback Form
+        </h2>
+
+        <form id="patient-feedback-form">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" id="fb-fullname" class="form-control" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" id="fb-email" class="form-control" placeholder="name@example.com" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group">
+              <label class="form-label">Phone Number (Optional)</label>
+              <input type="tel" id="fb-phone" class="form-control" placeholder="+94 77 123 4567">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Feedback Category</label>
+              <select id="fb-category" class="form-control">
+                <option value="DIFFICULTY_FINDING">Difficulty Finding a Department</option>
+                <option value="CONFUSING_DIRECTIONS">Confusing Hospital Directions</option>
+                <option value="INCORRECT_INFO">Incorrect Location Information</option>
+                <option value="SCHEDULE_ISSUE">Difficulty Understanding Clinic Schedules</option>
+                <option value="OTHER">Other Navigation / Hospital Experience</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Department or Facility Visited</label>
+            <select id="fb-department" class="form-control">
+              <option value="">General Hospital Campus</option>
+              <option value="1">Emergency Unit</option>
+              <option value="2">Outpatient Department (OPD)</option>
+              <option value="3">Diagnostic & Laboratory</option>
+              <option value="4">Central Pharmacy</option>
+              <option value="5">Radiology Department</option>
+              <option value="6">Dental Clinic</option>
+              <option value="7">Eye Clinic</option>
+              <option value="8">Children's Ward</option>
+              <option value="14">Cashier & Billing</option>
+            </select>
+          </div>
+
+          <!-- Feedback Type Radios (Matches Photo 30) -->
+          <div class="form-group">
+            <label class="form-label">Feedback Type</label>
+            <div style="display: flex; gap: 20px; margin-top: 6px; flex-wrap: wrap;">
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="radio" name="fb-type" value="SUGGESTION" checked> Suggestion
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="radio" name="fb-type" value="COMPLIMENT"> Compliment
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="radio" name="fb-type" value="COMPLAINT"> Complaint
+              </label>
+              <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="radio" name="fb-type" value="OTHER"> Other
+              </label>
+            </div>
+          </div>
+
+          <!-- Star Rating (Matches Photo 30) -->
+          <div class="form-group">
+            <label class="form-label">Rate Your Experience</label>
+            <div style="display: flex; gap: 8px; font-size: 1.6rem; cursor: pointer; color: #f59e0b;">
+              <i class="fas fa-star star-rating-icon" data-val="1"></i>
+              <i class="fas fa-star star-rating-icon" data-val="2"></i>
+              <i class="fas fa-star star-rating-icon" data-val="3"></i>
+              <i class="fas fa-star star-rating-icon" data-val="4"></i>
+              <i class="fas fa-star star-rating-icon" data-val="5"></i>
+            </div>
+          </div>
+
+          <!-- Feedback Textarea -->
+          <div class="form-group">
+            <label class="form-label">Your Feedback / Detailed Message</label>
+            <textarea id="fb-message" class="form-control" rows="4" placeholder="Describe the navigation challenge, location problem, or staff assistance you experienced..." required></textarea>
+          </div>
+
+          <!-- Consent Checkbox -->
+          <div class="form-group" style="display: flex; align-items: flex-start; gap: 10px;">
+            <input type="checkbox" id="fb-consent" checked style="margin-top: 4px;">
+            <label for="fb-consent" style="font-size: 0.85rem; color: var(--text-muted);">
+              I agree to the privacy policy and consent to follow-ups regarding my hospital navigation experience.
+            </label>
+          </div>
+
+          <button type="submit" id="fb-submit-btn" class="btn btn-navy btn-block" style="padding: 12px; font-size: 1rem;">
+            Submit Feedback
+          </button>
+        </form>
+      </div>
+
+      <!-- Why Your Feedback Matters (Matches Photo 30 Right) -->
+      <div>
+        <div class="card" style="background: linear-gradient(135deg, #e0f2fe 0%, #eff6ff 100%); border-color: #bfdbfe; padding: 28px; margin-bottom: 24px;">
+          <h3 style="color: #0b2545; font-size: 1.3rem; margin-bottom: 12px;">Why Your Feedback Matters</h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6; margin-bottom: 20px;">
+            Every piece of feedback is directly reviewed by our facilities management and patient care teams to install clearer signage, reduce wait times, and enhance patient experience.
+          </p>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; text-align: center; margin-bottom: 20px;">
+            <div>
+              <div style="width: 44px; height: 44px; background: white; border-radius: 50%; color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 6px auto; box-shadow: var(--shadow-sm);">
+                <i class="fas fa-comment-dots"></i>
+              </div>
+              <strong style="font-size: 0.85rem; color: #0b2545;">1. You Share</strong>
+            </div>
+            <i class="fas fa-arrow-right" style="color: var(--primary);"></i>
+            <div>
+              <div style="width: 44px; height: 44px; background: white; border-radius: 50%; color: #0284c7; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px auto; box-shadow: var(--shadow-sm);">
+                <i class="fas fa-tasks"></i>
+              </div>
+              <strong style="font-size: 0.85rem; color: #0b2545;">2. We Review</strong>
+            </div>
+            <i class="fas fa-arrow-right" style="color: var(--primary);"></i>
+            <div>
+              <div style="width: 44px; height: 44px; background: #10b981; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px auto; box-shadow: var(--shadow-sm);">
+                <i class="fas fa-check"></i>
+              </div>
+              <strong style="font-size: 0.85rem; color: #0b2545;">3. We Improve</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- My Feedback Tracking Widget -->
+        <div class="card" style="padding: 24px;">
+          <h3 style="color: #0b2545; font-size: 1.15rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-history" style="color: var(--primary);"></i> My Submitted Feedback
+          </h3>
+          <div id="my-feedback-history">
+            <!-- Loaded dynamically by feedback.js -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 HealthWay Hospital. All rights reserved.</div>
+        <div class="footer-tagline">Healthy Community, Stronger Tomorrow &#9825;</div>
+        <div>Demonstration project for university academic evaluation.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/feedback.js"></script>
+</body>
+</html>

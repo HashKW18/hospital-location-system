@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HealthWay Hospital - Find Your Way to Better Care</title>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-heartbeat fa-lg"></i>
+        </div>
+        <div class="brand-text">
+          <h1>HealthWay Hospital</h1>
+          <span>Care &bull; Locate &bull; Heal</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="locations.html" class="nav-link"><i class="fas fa-map-marker-alt"></i> Find Locations</a></li>
+        <li><a href="hospital-info.html" class="nav-link"><i class="fas fa-info-circle"></i> Hospital Information</a></li>
+        <li><a href="medical-camps.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Medical Camps</a></li>
+        <li><a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="feedback.html" class="nav-link"><i class="fas fa-comment-medical"></i> Feedback</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-actions">
+        <!-- Rendered by auth.js -->
+        <a href="login.html" class="btn btn-outline btn-sm"><i class="fas fa-user"></i> Login</a>
+        <a href="login.html?tab=register" class="btn btn-primary btn-sm"><i class="fas fa-user-plus"></i> Register</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section (Matches Photo 9) -->
+  <section class="hero-section">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>
+          Find Your Way<br>
+          <span>to Better Care</span>
+        </h1>
+        <p>
+          Search hospital departments, clinics, and amenities easily. Discover upcoming free medical camps, receive clinical announcements, and get turn-by-turn guidance.
+        </p>
+
+        <!-- Search Bar -->
+        <div class="hero-search-box">
+          <i class="fas fa-search" style="color: var(--text-muted); font-size: 1.1rem;"></i>
+          <input type="text" id="home-search-input" placeholder="Search for departments (e.g. Emergency, Pharmacy, Lab)..." onkeydown="if(event.key==='Enter') navigateSearch()">
+          <button onclick="navigateSearch()" class="btn btn-primary">
+            Find Location &rarr;
+          </button>
+        </div>
+
+        <!-- Quick Access Badges -->
+        <div class="hero-badges-row">
+          <a href="locations.html" class="hero-quick-card">
+            <i class="fas fa-map-marked-alt"></i>
+            <div>
+              <strong>Hospital Locations</strong>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">26 Facilities</div>
+            </div>
+          </a>
+          <a href="medical-camps.html" class="hero-quick-card">
+            <i class="fas fa-calendar-check" style="color: #10b981;"></i>
+            <div>
+              <strong>Medical Camps</strong>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Free Health Checkups</div>
+            </div>
+          </a>
+          <a href="notifications.html" class="hero-quick-card">
+            <i class="fas fa-bullhorn" style="color: #0284c7;"></i>
+            <div>
+              <strong>Notifications</strong>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Latest Updates</div>
+            </div>
+          </a>
+          <a href="feedback.html" class="hero-quick-card">
+            <i class="fas fa-comment-dots" style="color: #f59e0b;"></i>
+            <div>
+              <strong>Patient Feedback</strong>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">Help Us Improve</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Large Interactive Hero Image Slider with High-Quality Photographs -->
+      <div class="hero-slider-container" id="hero-image-slider">
+        <div class="hero-slider-track">
+          
+          <!-- Slide 1: Modern Hospital Exterior & 24/7 Emergency -->
+          <div class="hero-slide active">
+            <img src="images/RMH-Critical-Infrastructure-Finals-5.jpg" alt="Emergency and Critical Care Center">
+            <div class="hero-slide-overlay">
+              <span class="hero-slide-badge"><i class="fas fa-ambulance"></i> Emergency Services</span>
+              <h3 class="hero-slide-title">24/7 Emergency & Trauma Care</h3>
+              <p class="hero-slide-desc">Fully equipped rapid trauma resuscitation suites, critical infrastructure, and swift response teams.</p>
+            </div>
+          </div>
+
+          <!-- Slide 2: Reception & Admissions -->
+          <div class="hero-slide">
+            <img src="images/image.jpg" alt="Main Reception Desk">
+            <div class="hero-slide-overlay">
+              <span class="hero-slide-badge"><i class="fas fa-hospital-user"></i> Admissions Desk</span>
+              <h3 class="hero-slide-title">Main Reception & Information Center</h3>
+              <p class="hero-slide-desc">Warm patient onboarding, visitor floor guidance, insurance desks, and quick navigation assistance.</p>
+            </div>
+          </div>
+
+          <!-- Slide 3: Surgical Operating Theaters -->
+          <div class="hero-slide">
+            <img src="images/5.jpg" alt="Advanced Surgical Operating Theaters">
+            <div class="hero-slide-overlay">
+              <span class="hero-slide-badge"><i class="fas fa-procedures"></i> Advanced Surgery</span>
+              <h3 class="hero-slide-title">State-of-the-Art Surgical Suites</h3>
+              <p class="hero-slide-desc">Minimally invasive laparoscopic surgery, high-precision imaging, and sterile laminar airflow suites.</p>
+            </div>
+          </div>
+
+          <!-- Slide 4: Specialist Outpatient Consultation -->
+          <div class="hero-slide">
+            <img src="images/young-male-psysician-with-patient-measuring-blood-pressure_1303-17879.avif" alt="Specialist OPD Consultation">
+            <div class="hero-slide-overlay">
+              <span class="hero-slide-badge"><i class="fas fa-stethoscope"></i> Clinical Services</span>
+              <h3 class="hero-slide-title">Specialist OPD & Diagnostic Clinics</h3>
+              <p class="hero-slide-desc">Experienced doctors across Cardiology, Neurology, Pediatrics, Orthopedics, and Internal Medicine.</p>
+            </div>
+          </div>
+
+          <!-- Slide 5: Inpatient Recovery Wards -->
+          <div class="hero-slide">
+            <img src="images/smiling-patient-with-arm-cast-in-hospital-bed-384e0b19bd755ab6.webp" alt="Inpatient Recovery Suites">
+            <div class="hero-slide-overlay">
+              <span class="hero-slide-badge"><i class="fas fa-heart"></i> Inpatient Care</span>
+              <h3 class="hero-slide-title">Comfortable Patient Recovery Wards</h3>
+              <p class="hero-slide-desc">Compassionate 24-hour nursing supervision, ergonomic patient suites, and specialized therapy care.</p>
+            </div>
+          </div>
+
+          <!-- Slide 6: Hospital Plaza & Visitor Amenities -->
+          <div class="hero-slide">
+            <img src="images/zouki3.jpg" alt="Hospital Plaza and Dining">
+            <div class="hero-slide-overlay">
+              <span class="hero-slide-badge"><i class="fas fa-coffee"></i> Hospital Amenities</span>
+              <h3 class="hero-slide-title">Visitor Plaza, Dining & Facilities</h3>
+              <p class="hero-slide-desc">Nutritious dining cafés, quiet waiting lounges, central ATMs, gift shop, and visitor parking decks.</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Slider Controls: Previous & Next Arrow Buttons -->
+        <button class="slider-arrow-btn slider-arrow-prev" id="slider-prev-btn" aria-label="Previous Slide">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="slider-arrow-btn slider-arrow-next" id="slider-next-btn" aria-label="Next Slide">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Slider Navigation Dots (matches slide count) -->
+        <div class="slider-dots-container" id="slider-dots-box">
+          <div class="slider-dot active" data-slide="0"></div>
+          <div class="slider-dot" data-slide="1"></div>
+          <div class="slider-dot" data-slide="2"></div>
+          <div class="slider-dot" data-slide="3"></div>
+          <div class="slider-dot" data-slide="4"></div>
+          <div class="slider-dot" data-slide="5"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Body Widgets (Matches Photo 9 Lower Row) -->
+  <main class="container section-padding">
+    <div style="display: grid; grid-template-columns: 1fr 1fr 0.9fr; gap: 24px;">
+      
+      <!-- Upcoming Medical Camps Widget -->
+      <div class="card" style="padding: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.2rem; color: #0b2545; display: flex; align-items: center; gap: 8px;">
+            <i class="far fa-calendar-alt" style="color: var(--primary);"></i> Upcoming Medical Camps
+          </h3>
+          <a href="medical-camps.html" style="font-size: 0.85rem; font-weight: 700;">View All &rarr;</a>
+        </div>
+
+        <div style="background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color); padding: 16px; margin-bottom: 14px; display: flex; gap: 14px;">
+          <div style="width: 50px; height: 50px; background: #e0f2fe; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.4rem; flex-shrink: 0;">
+            <i class="fas fa-stethoscope"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <h4 style="font-size: 0.98rem; color: #0b2545;">Free General Health Checkup</h4>
+              <span class="badge badge-free">FREE</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+              Comprehensive screening with blood glucose, blood pressure, and physician review.
+            </p>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px;">
+              <i class="far fa-calendar"></i> Nov 20, 2026 &bull; <i class="fas fa-map-marker-alt"></i> Main Reception
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; border-radius: var(--radius-sm); border: 1px solid var(--border-color); padding: 16px; display: flex; gap: 14px;">
+          <div style="width: 50px; height: 50px; background: #fee2e2; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.4rem; flex-shrink: 0;">
+            <i class="fas fa-tint"></i>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <h4 style="font-size: 0.98rem; color: #0b2545;">Free Blood Donation Camp</h4>
+              <span class="badge badge-free">FREE</span>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4;">
+              Community life-saver blood drive with donor card and refreshments.
+            </p>
+            <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 6px;">
+              <i class="far fa-calendar"></i> Nov 28, 2026 &bull; <i class="fas fa-map-marker-alt"></i> Blood Bank
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Latest Hospital Announcements Widget -->
+      <div class="card" style="padding: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <h3 style="font-size: 1.2rem; color: #0b2545; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-bullhorn" style="color: #0284c7;"></i> Latest Announcements
+          </h3>
+          <a href="notifications.html" style="font-size: 0.85rem; font-weight: 700;">View All &rarr;</a>
+        </div>
+
+        <ul style="list-style: none;">
+          <li style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 12px;">
+            <div style="font-weight: 700; color: #0b2545; font-size: 0.95rem;">Dental Clinic Special Screenings</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Oral health screenings starting next week in Dental Wing Block C.</p>
+          </li>
+          <li style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 12px;">
+            <div style="font-weight: 700; color: #0b2545; font-size: 0.95rem;">Outpatient Clinic Hours Updated</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Block A specialty clinics operate from 8:00 AM to 5:00 PM.</p>
+          </li>
+          <li>
+            <div style="font-weight: 700; color: #0b2545; font-size: 0.95rem;">Elevator Bank B Safety Inspection</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Quarterly elevator servicing this Saturday from 1 PM to 3 PM.</p>
+          </li>
+        </ul>
+      </div>
+
+      <!-- How It Works Widget (Matches Photo 9) -->
+      <div class="how-it-works-box">
+        <h3 style="font-size: 1.25rem; color: #0b2545; text-align: center; font-weight: 800;">How It Works?</h3>
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.88rem; margin-top: 4px;">
+          Navigate our hospital in 3 simple steps
+        </p>
+
+        <div class="steps-row">
+          <div class="step-item">
+            <div class="step-circle"><i class="fas fa-search"></i></div>
+            <strong style="font-size: 0.85rem; color: #0b2545;">1. Search</strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Find Clinic</span>
+          </div>
+
+          <i class="fas fa-arrow-right" style="color: var(--primary); font-size: 1.1rem;"></i>
+
+          <div class="step-item">
+            <div class="step-circle"><i class="fas fa-map-pin"></i></div>
+            <strong style="font-size: 0.85rem; color: #0b2545;">2. Locate</strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Floor Map</span>
+          </div>
+
+          <i class="fas fa-arrow-right" style="color: var(--primary); font-size: 1.1rem;"></i>
+
+          <div class="step-item">
+            <div class="step-circle" style="background: #10b981; border-color: #10b981; color: white;">
+              <i class="fas fa-heart"></i>
+            </div>
+            <strong style="font-size: 0.85rem; color: #0b2545;">3. Get Care</strong>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Fast Triage</span>
+          </div>
+        </div>
+
+        <a href="locations.html" class="btn btn-primary btn-sm" style="margin-top: 24px; width: 100%;">
+          Launch Hospital Map
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Educational Demonstration Banner -->
+  <div style="background: #e0f2fe; border-top: 1px solid #bfdbfe; border-bottom: 1px solid #bfdbfe; padding: 12px 0; text-align: center; font-size: 0.88rem; color: #0369a1;">
+    <div class="container">
+      <i class="fas fa-info-circle"></i> <strong>University 1-Year Individual Project Demonstration:</strong>
+      All clinical schedules, contacts, and camp listings shown are demonstration sample data.
+    </div>
+  </div>
+
+  <!-- Footer (Matches Photo 9 & Design Requirements) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo" style="margin-bottom: 12px;">
+            <div class="brand-icon">
+              <i class="fas fa-heartbeat fa-lg"></i>
+            </div>
+            <div class="brand-text">
+              <h1>HealthWay Hospital</h1>
+              <span style="color: #38bdf8;">Care &bull; Locate &bull; Heal</span>
+            </div>
+          </a>
+          <p style="color: #94a3b8; font-size: 0.9rem; line-height: 1.6; max-width: 300px;">
+            Providing reliable patient navigation, health camp notifications, and care accessibility for our community.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="locations.html">Find Locations</a></li>
+            <li><a href="hospital-info.html">Hospital Information</a></li>
+            <li><a href="medical-camps.html">Medical Camps</a></li>
+            <li><a href="feedback.html">Patient Feedback</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Patient Services</h4>
+          <ul class="footer-links">
+            <li><a href="locations.html?category=Emergency">Emergency & Trauma</a></li>
+            <li><a href="locations.html?category=Outpatient">Outpatient (OPD)</a></li>
+            <li><a href="locations.html?category=Laboratory">Diagnostic Lab</a></li>
+            <li><a href="locations.html?category=Pharmacy">Pharmacy Dispensary</a></li>
+            <li><a href="login.html">Patient Dashboard</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Get In Touch</h4>
+          <div class="footer-contact-item">
+            <i class="fas fa-phone-alt" style="color: #38bdf8;"></i>
+            <span>+94 11 123 4567</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fas fa-envelope" style="color: #38bdf8;"></i>
+            <span>info@healthway.hospital</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fas fa-map-marker-alt" style="color: #38bdf8;"></i>
+            <span>123 Health Street, Colombo</span>
+          </div>
+          <div style="margin-top: 16px; display: flex; gap: 12px;">
+            <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
+            <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-youtube"></i></a>
+            <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
+            <a href="#" style="color: white; font-size: 1.2rem;"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 HealthWay Hospital. All rights reserved.
+        </div>
+        <div class="footer-tagline">
+          Healthy Community, Stronger Tomorrow &#9825;
+        </div>
+        <div>
+          Sample website for university educational evaluation.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function navigateSearch() {
+      const q = document.getElementById('home-search-input').value.trim();
+      window.location.href = `locations.html?search=${encodeURIComponent(q)}`;
+    }
+  </script>
+</body>
+</html>

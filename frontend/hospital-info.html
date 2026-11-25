@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Information - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-heartbeat fa-lg"></i>
+        </div>
+        <div class="brand-text">
+          <h1>HealthWay Hospital</h1>
+          <span>Care &bull; Locate &bull; Heal</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="locations.html" class="nav-link"><i class="fas fa-map-marker-alt"></i> Find Locations</a></li>
+        <li><a href="hospital-info.html" class="nav-link active"><i class="fas fa-info-circle"></i> Hospital Information</a></li>
+        <li><a href="medical-camps.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Medical Camps</a></li>
+        <li><a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="feedback.html" class="nav-link"><i class="fas fa-comment-medical"></i> Feedback</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-actions"></div>
+    </div>
+  </nav>
+
+  <!-- Admin Quick Edit Banner (Shown if logged in as ADMIN) -->
+  <div id="admin-info-banner" style="display: none; background: #eff6ff; border-bottom: 1px solid #bfdbfe; padding: 10px 0;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+      <div style="font-size: 0.9rem; color: #1e40af; font-weight: 600;">
+        <i class="fas fa-user-shield"></i> You are logged in as Administrator. You can edit and update all hospital information.
+      </div>
+      <a href="admin-dashboard.html?tab=hospital-info" class="btn btn-primary btn-sm" style="font-size: 0.82rem;">
+        <i class="fas fa-edit"></i> Edit Hospital Information in Admin Portal &rarr;
+      </a>
+    </div>
+  </div>
+
+  <!-- Hero Header -->
+  <section class="hero-section" style="padding: 40px 0 30px 0;">
+    <div class="container">
+      <h1 id="hospital-hero-title" style="font-size: 2.6rem; margin-bottom: 8px;">About HealthWay Hospital</h1>
+      <p id="hospital-hero-subtitle" style="font-size: 1.1rem; color: var(--text-secondary); max-width: 650px;">
+        Providing high-standard patient healthcare, clinical diagnostics, emergency treatment, and community welfare services with compassion and excellence.
+      </p>
+    </div>
+  </section>
+
+  <!-- Hospital Details Content -->
+  <main class="container section-padding">
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 32px; align-items: start;">
+      
+      <div>
+        <!-- Emergency Protocol Card -->
+        <div class="card" style="border-left: 6px solid #ef4444; margin-bottom: 28px; background: #fff5f5;">
+          <h3 style="color: #991b1b; display: flex; align-items: center; gap: 10px; font-size: 1.25rem;">
+            <i class="fas fa-ambulance"></i> 24/7 Emergency & Critical Care Admissions
+          </h3>
+          <p id="hospital-emergency-text" style="color: #7f1d1d; font-size: 0.95rem; margin-top: 8px; line-height: 1.6;">
+            Our Emergency & Trauma Unit is open 24 hours every day. If you require urgent ambulance transfer or acute life-support care, contact our 24/7 Emergency Hotline immediately at <strong id="hospital-emergency-hotline">+94 11 123 4567 (Ext 1)</strong> or use the designated ambulance entrance on HealthWay Boulevard.
+          </p>
+        </div>
+
+        <!-- Overview & Mission -->
+        <div class="card" style="margin-bottom: 28px; padding: 28px;">
+          <h3 style="color: #0b2545; font-size: 1.35rem; margin-bottom: 14px;">Clinical Overview</h3>
+          <p id="hospital-clinical-overview" style="color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">
+            HealthWay Hospital is a state-of-the-art multi-specialty tertiary care hospital. With over 250 in-patient beds, 13 specialized clinical departments, modular surgical suites, and advanced 3T MRI & CT imaging, we are committed to providing seamless medical services to patients and visitors.
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div style="background: #f8fafc; padding: 14px; border-radius: 8px;">
+              <h4 style="color: var(--primary-navy); font-size: 1rem;"><i class="fas fa-bullseye" style="color: var(--primary);"></i> Our Mission</h4>
+              <p id="hospital-mission" style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">To deliver high-quality, patient-centric healthcare with accessible hospital navigation.</p>
+            </div>
+            <div style="background: #f8fafc; padding: 14px; border-radius: 8px;">
+              <h4 style="color: var(--primary-navy); font-size: 1rem;"><i class="fas fa-eye" style="color: var(--primary);"></i> Our Vision</h4>
+              <p id="hospital-vision" style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">To be the region's most trusted hospital, recognized for clinical excellence and patient hospitality.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visitor Guidelines & Visiting Hours -->
+        <div class="card" style="padding: 28px; margin-bottom: 28px;">
+          <h3 style="color: #0b2545; font-size: 1.35rem; margin-bottom: 14px;">Visitor Guidelines & Ward Hours</h3>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.92rem;">
+            <thead>
+              <tr style="background: #f1f5f9; text-align: left;">
+                <th style="padding: 10px 14px;">Ward Category</th>
+                <th style="padding: 10px 14px; text-align: center;">Visiting Hours</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 12px 14px; font-weight: 600;">General Inpatient Ward (Block E)</td>
+                <td id="hospital-hours-general" style="padding: 12px 14px; text-align: center;">11:00 AM - 1:00 PM | 5:00 PM - 7:00 PM</td>
+              </tr>
+              <tr style="border-bottom: 1px solid #e2e8f0;">
+                <td style="padding: 12px 14px; font-weight: 600;">Pediatrics & Children's Ward (Block D)</td>
+                <td id="hospital-hours-pediatrics" style="padding: 12px 14px; text-align: center;">10:00 AM - 12:00 PM | 4:00 PM - 7:00 PM</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px 14px; font-weight: 600;">Intensive Care Unit (ICU - Block A)</td>
+                <td id="hospital-hours-icu" style="padding: 12px 14px; text-align: center;">4:00 PM - 5:00 PM (Direct family only)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Quick Contact Info Card -->
+      <aside>
+        <div class="card" style="padding: 26px; background: white; margin-bottom: 24px;">
+          <h3 style="color: #0b2545; font-size: 1.2rem; margin-bottom: 18px;">Contact Information</h3>
+          
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase;">Hospital Address</div>
+            <p id="hospital-address" style="color: #334155; margin-top: 2px; font-size: 0.95rem;">123 Health Street, Colombo 00700, Sri Lanka</p>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase;">General Inquiry & Token Desk</div>
+            <p id="hospital-inquiry-phone" style="color: #334155; margin-top: 2px; font-size: 0.95rem;">+94 11 123 4567 / +94 11 123 4568</p>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase;">Email Contact</div>
+            <p id="hospital-email" style="color: #334155; margin-top: 2px; font-size: 0.95rem;">info@healthway.hospital</p>
+          </div>
+
+          <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase;">Visitor Car Parking</div>
+            <p id="hospital-parking" style="color: #334155; margin-top: 2px; font-size: 0.95rem;">500+ multi-level covered bays with first 30 minutes complimentary.</p>
+          </div>
+
+          <a href="locations.html" class="btn btn-primary btn-block" style="margin-top: 10px;">
+            <i class="fas fa-map-marker-alt"></i> Find Departments
+          </a>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 HealthWay Hospital. All rights reserved.</div>
+        <div class="footer-tagline">Healthy Community, Stronger Tomorrow &#9825;</div>
+        <div>Demonstration project for university academic evaluation.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check if logged in user is ADMIN to show admin banner
+      const currentUser = api.getCurrentUser();
+      if (currentUser && currentUser.role === 'ADMIN') {
+        const banner = document.getElementById('admin-info-banner');
+        if (banner) banner.style.display = 'block';
+      }
+
+      // Load dynamic hospital info
+      try {
+        const info = await api.getHospitalInfo();
+        if (info) {
+          if (info.heroTitle) document.getElementById('hospital-hero-title').innerText = info.heroTitle;
+          if (info.heroSubtitle) document.getElementById('hospital-hero-subtitle').innerText = info.heroSubtitle;
+          if (info.emergencyHotline) document.getElementById('hospital-emergency-hotline').innerText = info.emergencyHotline;
+          if (info.emergencyText) {
+            document.getElementById('hospital-emergency-text').innerHTML = info.emergencyText.replace(
+              info.emergencyHotline,
+              `<strong id="hospital-emergency-hotline">${info.emergencyHotline}</strong>`
+            );
+          }
+          if (info.clinicalOverview) document.getElementById('hospital-clinical-overview').innerText = info.clinicalOverview;
+          if (info.mission) document.getElementById('hospital-mission').innerText = info.mission;
+          if (info.vision) document.getElementById('hospital-vision').innerText = info.vision;
+          if (info.hoursGeneral) document.getElementById('hospital-hours-general').innerText = info.hoursGeneral;
+          if (info.hoursPediatrics) document.getElementById('hospital-hours-pediatrics').innerText = info.hoursPediatrics;
+          if (info.hoursICU) document.getElementById('hospital-hours-icu').innerText = info.hoursICU;
+          if (info.address) document.getElementById('hospital-address').innerText = info.address;
+          if (info.inquiryPhone) document.getElementById('hospital-inquiry-phone').innerText = info.inquiryPhone;
+          if (info.email) document.getElementById('hospital-email').innerText = info.email;
+          if (info.parkingInfo) document.getElementById('hospital-parking').innerText = info.parkingInfo;
+        }
+      } catch (err) {
+        console.warn('Could not fetch custom hospital info, using default template:', err);
+      }
+    });
+  </script>
+</body>
+</html>

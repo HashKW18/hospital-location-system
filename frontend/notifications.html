@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Notifications - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-heartbeat fa-lg"></i>
+        </div>
+        <div class="brand-text">
+          <h1>HealthWay Hospital</h1>
+          <span>Care &bull; Locate &bull; Heal</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="locations.html" class="nav-link"><i class="fas fa-map-marker-alt"></i> Find Locations</a></li>
+        <li><a href="hospital-info.html" class="nav-link"><i class="fas fa-info-circle"></i> Hospital Information</a></li>
+        <li><a href="medical-camps.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Medical Camps</a></li>
+        <li><a href="notifications.html" class="nav-link active"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="feedback.html" class="nav-link"><i class="fas fa-comment-medical"></i> Feedback</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-actions"></div>
+    </div>
+  </nav>
+
+  <!-- Notifications Header (Matches Photo 25) -->
+  <section style="background: white; border-bottom: 1px solid var(--border-color); padding: 30px 0;">
+    <div class="container">
+      <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px;">
+        <a href="index.html">Home</a> &gt; <span>Notifications</span>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <h1 style="font-size: 2.4rem; font-weight: 800; color: #0b2545;">Notifications</h1>
+        
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <button onclick="markAllAsRead()" class="btn btn-outline btn-sm">
+            <i class="fas fa-check-double"></i> Mark all as read
+          </button>
+          
+          <div style="position: relative; width: 280px;">
+            <i class="fas fa-search" style="position: absolute; left: 12px; top: 11px; color: var(--text-light);"></i>
+            <input type="text" id="notif-search-input" placeholder="Search notifications..." class="form-control" style="padding-left: 36px; border-radius: var(--radius-full); padding-top: 8px; padding-bottom: 8px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Notification Feed Layout (Matches Photo 25) -->
+  <main class="container section-padding">
+    <div style="display: grid; grid-template-columns: 240px 1fr; gap: 30px; align-items: start;">
+      
+      <!-- Left Category Selector (Matches Photo 25) -->
+      <aside style="background: white; border-radius: var(--radius-md); border: 1px solid var(--border-color); padding: 16px;">
+        <ul style="list-style: none;">
+          <li style="margin-bottom: 6px;">
+            <button class="notif-filter-btn active btn-block" data-category="All" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-weight: 600; text-align: left; background: var(--primary); color: white;">
+              <span><i class="fas fa-inbox"></i> All Notifications</span>
+              <span class="badge badge-gray" style="background: rgba(255,255,255,0.3); color: white;">5</span>
+            </button>
+          </li>
+          <li style="margin-bottom: 6px;">
+            <button class="notif-filter-btn btn-block" data-category="CAMP" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-weight: 600; text-align: left; background: transparent; color: var(--text-secondary);">
+              <span><i class="fas fa-calendar-plus" style="color: #10b981;"></i> Medical Camps</span>
+              <span class="badge badge-gray">2</span>
+            </button>
+          </li>
+          <li style="margin-bottom: 6px;">
+            <button class="notif-filter-btn btn-block" data-category="ANNOUNCEMENT" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-weight: 600; text-align: left; background: transparent; color: var(--text-secondary);">
+              <span><i class="fas fa-bullhorn" style="color: #0284c7;"></i> Announcements</span>
+              <span class="badge badge-gray">2</span>
+            </button>
+          </li>
+          <li>
+            <button class="notif-filter-btn btn-block" data-category="GENERAL" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; font-weight: 600; text-align: left; background: transparent; color: var(--text-secondary);">
+              <span><i class="fas fa-cog" style="color: #f59e0b;"></i> General & Maintenance</span>
+              <span class="badge badge-gray">1</span>
+            </button>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Right Notifications Feed -->
+      <section id="notifications-list">
+        <!-- Filled dynamically by notifications.js -->
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 HealthWay Hospital. All rights reserved.</div>
+        <div class="footer-tagline">Healthy Community, Stronger Tomorrow &#9825;</div>
+        <div>Demonstration project for university academic evaluation.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/notifications.js"></script>
+</body>
+</html>

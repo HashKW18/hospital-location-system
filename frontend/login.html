@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Registration - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-page-bg {
+      background: linear-gradient(135deg, #e0f2fe 0%, #dbeafe 50%, #eff6ff 100%);
+      min-height: calc(100vh - 80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
+    }
+    .auth-cards-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      width: 100%;
+      max-width: 980px;
+      z-index: 2;
+    }
+    @media (max-width: 860px) {
+      .auth-cards-container {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-heartbeat fa-lg"></i>
+        </div>
+        <div class="brand-text">
+          <h1>HealthWay Hospital</h1>
+          <span>Care &bull; Locate &bull; Heal</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="locations.html" class="nav-link"><i class="fas fa-map-marker-alt"></i> Find Locations</a></li>
+        <li><a href="hospital-info.html" class="nav-link"><i class="fas fa-info-circle"></i> Hospital Information</a></li>
+        <li><a href="medical-camps.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Medical Camps</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Login & Register Cards (Matches Photo 15) -->
+  <div class="auth-page-bg">
+    <div class="auth-cards-container">
+      
+      <!-- LOGIN CARD (Matches Photo 15 Left) -->
+      <div class="card" style="padding: 36px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);">
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: #0b2545; margin-bottom: 4px;">Login</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Access your healthcare dashboard</p>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label">Email or Username</label>
+            <div style="position: relative;">
+              <i class="far fa-envelope" style="position: absolute; left: 14px; top: 14px; color: var(--text-light);"></i>
+              <input type="email" id="login-email" class="form-control" style="padding-left: 40px;" placeholder="alex.carter@gmail.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div style="position: relative;">
+              <i class="fas fa-lock" style="position: absolute; left: 14px; top: 14px; color: var(--text-light);"></i>
+              <input type="password" id="login-password" class="form-control" style="padding-left: 40px; padding-right: 40px;" placeholder="••••••••" required>
+              <i class="far fa-eye" id="toggle-password" style="position: absolute; right: 14px; top: 14px; color: var(--text-light); cursor: pointer;" onclick="togglePasswordVisibility('login-password')"></i>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; font-size: 0.88rem;">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--text-secondary);">
+              <input type="checkbox" id="remember-me" checked> Remember me
+            </label>
+            <a href="javascript:void(0)" onclick="alert('For project testing, default password is Password@123')" style="color: var(--primary); font-weight: 600;">Forgot Password?</a>
+          </div>
+
+          <button type="submit" id="login-btn" class="btn btn-navy btn-block" style="padding: 13px; font-size: 1rem;">
+            Login
+          </button>
+        </form>
+
+        <!-- Quick 1-Click Evaluation Login Buttons -->
+        <div style="margin-top: 24px; padding-top: 18px; border-top: 1px dashed var(--border-color); text-align: center;">
+          <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase;">
+            Quick Demo Login (For Evaluators)
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: center;">
+            <button onclick="auth.demoLogin('REGISTERED_USER')" class="btn btn-outline btn-sm" style="flex: 1; font-size: 0.8rem;">
+              <i class="fas fa-user"></i> Patient
+            </button>
+            <button onclick="auth.demoLogin('STAFF')" class="btn btn-outline btn-sm" style="flex: 1; font-size: 0.8rem;">
+              <i class="fas fa-user-md"></i> Staff
+            </button>
+            <button onclick="auth.demoLogin('ADMIN')" class="btn btn-outline btn-sm" style="flex: 1; font-size: 0.8rem;">
+              <i class="fas fa-user-shield"></i> Admin
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTER CARD (Matches Photo 15 Right) -->
+      <div class="card" style="padding: 36px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);">
+        <h2 style="font-size: 1.8rem; font-weight: 800; color: #0b2545; margin-bottom: 4px;">Register</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">Join HealthWay Hospital today</p>
+
+        <form id="register-form">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <div style="position: relative;">
+              <i class="far fa-user" style="position: absolute; left: 14px; top: 14px; color: var(--text-light);"></i>
+              <input type="text" id="reg-fullname" class="form-control" style="padding-left: 40px;" placeholder="John Doe" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <div style="position: relative;">
+              <i class="far fa-envelope" style="position: absolute; left: 14px; top: 14px; color: var(--text-light);"></i>
+              <input type="email" id="reg-email" class="form-control" style="padding-left: 40px;" placeholder="john@example.com" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <div style="position: relative;">
+              <i class="fas fa-phone-alt" style="position: absolute; left: 14px; top: 14px; color: var(--text-light);"></i>
+              <input type="tel" id="reg-phone" class="form-control" style="padding-left: 40px;" placeholder="+94 77 123 4567">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div style="position: relative;">
+              <i class="fas fa-lock" style="position: absolute; left: 14px; top: 14px; color: var(--text-light);"></i>
+              <input type="password" id="reg-password" class="form-control" style="padding-left: 40px;" placeholder="At least 6 characters" minlength="6" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Confirm Password</label>
+            <div style="position: relative;">
+              <i class="fas fa-lock" style="position: absolute; left: 14px; top: 14px; color: var(--text-light);"></i>
+              <input type="password" id="reg-confirm-password" class="form-control" style="padding-left: 40px;" placeholder="Re-enter password" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="display: flex; align-items: flex-start; gap: 8px;">
+            <input type="checkbox" id="reg-terms" checked required style="margin-top: 4px;">
+            <label for="reg-terms" style="font-size: 0.85rem; color: var(--text-secondary);">
+              I agree to the Terms & Conditions and Privacy Policy.
+            </label>
+          </div>
+
+          <button type="submit" id="reg-btn" class="btn btn-primary btn-block" style="padding: 13px; font-size: 1rem;">
+            Register
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function togglePasswordVisibility(fieldId) {
+      const field = document.getElementById(fieldId);
+      field.type = field.type === 'password' ? 'text' : 'password';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('login-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+      try {
+        await auth.login(email, password);
+      } catch (err) {
+        showToast(err.message, 'danger');
+        btn.disabled = false;
+        btn.innerHTML = 'Login';
+      }
+    });
+
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById('reg-fullname').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const phone = document.getElementById('reg-phone').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+      if (password !== confirmPassword) {
+        alert('Passwords do not match.');
+        return;
+      }
+
+      const btn = document.getElementById('reg-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+
+      try {
+        await api.register({
+          fullName,
+          email,
+          phoneNumber: phone,
+          password
+        });
+        showToast('Registration successful! Redirecting to dashboard...', 'success');
+        setTimeout(() => {
+          window.location.href = 'user-dashboard.html';
+        }, 1000);
+      } catch (err) {
+        showToast(err.message, 'danger');
+        btn.disabled = false;
+        btn.innerHTML = 'Register';
+      }
+    });
+  </script>
+</body>
+</html>

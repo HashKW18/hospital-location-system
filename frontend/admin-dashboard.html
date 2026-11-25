@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- LEFT SIDEBAR (Matches Photo 23) -->
+    <aside class="dash-sidebar">
+      <div class="dash-sidebar-header">
+        <div class="brand-icon" style="width: 36px; height: 36px; font-size: 1rem; background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div class="brand-text">
+          <h2>HealthWay</h2>
+          <span>Admin Portal</span>
+        </div>
+      </div>
+
+      <ul class="dash-nav">
+        <li class="dash-nav-item">
+          <a class="dash-nav-link active" onclick="switchDashTab('pane-admin-overview', this)">
+            <i class="fas fa-chart-line"></i> Dashboard Overview
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-admin-locations', this)">
+            <i class="fas fa-map-marked-alt"></i> Manage Locations
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-admin-notifs', this)">
+            <i class="fas fa-bullhorn"></i> Manage Notifications
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-admin-users', this)">
+            <i class="fas fa-users-cog"></i> Manage Users & Roles
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-admin-hospital-info', this)">
+            <i class="fas fa-hospital"></i> Hospital Information
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="staff-dashboard.html" class="dash-nav-link">
+            <i class="fas fa-hospital-alt"></i> Staff Operations
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="locations.html" class="dash-nav-link">
+            <i class="fas fa-compass"></i> Public Location Finder
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="hospital-info.html" class="dash-nav-link">
+            <i class="fas fa-info-circle"></i> View Public Info Page
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="index.html" class="dash-nav-link">
+            <i class="fas fa-globe"></i> View Public Site
+          </a>
+        </li>
+      </ul>
+
+      <div class="dash-sidebar-footer">
+        <div class="dash-user-card">
+          <div class="avatar" id="admin-sidebar-avatar" style="background: #ef4444; color: white;">AD</div>
+          <div class="info">
+            <div class="name" id="admin-sidebar-name">System Administrator</div>
+            <div class="role-pill">SUPER ADMIN</div>
+          </div>
+        </div>
+        <button onclick="auth.logout()" class="btn btn-outline btn-sm btn-block" style="color: white; border-color: rgba(255,255,255,0.2);">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN BODY -->
+    <main class="dash-main">
+      <!-- Topbar (Matches Photo 23) -->
+      <header class="dash-topbar">
+        <div class="dash-topbar-search">
+          <i class="fas fa-search" style="color: var(--text-light);"></i>
+          <input type="text" placeholder="Search patients, doctors, events, system logs...">
+        </div>
+
+        <div class="dash-topbar-actions">
+          <button onclick="openAddNotificationModal()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> Post Notification
+          </button>
+          <button onclick="openCreateStaffModal()" class="btn btn-sm" style="background: #10b981; color: white; border: none; font-weight: 700;">
+            <i class="fas fa-user-plus"></i> Add Staff
+          </button>
+          <a href="notifications.html" class="topbar-icon-btn">
+            <i class="far fa-bell"></i>
+            <span class="topbar-badge">12</span>
+          </a>
+          <a href="feedback.html" class="topbar-icon-btn">
+            <i class="far fa-comment-dots"></i>
+          </a>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="avatar-circle" id="admin-topbar-avatar" style="width: 38px; height: 38px; background: #ef4444;">AD</div>
+            <span id="admin-topbar-name" style="font-weight: 700; font-size: 0.95rem; color: #0b2545;">System Administrator</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <div class="dash-content">
+        
+        <!-- ==========================================
+             PANE 1: OVERVIEW (Matches Photo 23)
+             ========================================== -->
+        <div id="pane-admin-overview" class="dash-tab-pane active">
+          
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 14px; margin-bottom: 24px;">
+            <div>
+              <h1 style="font-size: 2rem; font-weight: 800; color: #0b2545;">Admin Dashboard</h1>
+              <p style="color: var(--text-secondary); font-size: 0.95rem;">Overview of hospital operations, patient accounts, and announcements</p>
+            </div>
+            <button onclick="openEditAdminStatsModal()" class="btn btn-primary btn-sm">
+              <i class="fas fa-edit"></i> Edit Hospital Metrics
+            </button>
+          </div>
+
+          <!-- Top 4 Metric Cards (Matches Photo 23) -->
+          <div class="dash-metrics-grid">
+            <div class="dash-metric-card" onclick="openEditAdminStatsModal()" style="cursor: pointer;" title="Click to edit Total Registered Patients">
+              <div class="metric-data">
+                <h4>Total Registered Patients</h4>
+                <div class="value"><span id="stat-total-patients">12,845</span> <span style="font-size: 0.8rem; color: #10b981; font-weight: 700;">&nearr; +12%</span></div>
+              </div>
+              <div class="metric-icon-wrap metric-icon-blue"><i class="fas fa-users"></i></div>
+            </div>
+
+            <div class="dash-metric-card" onclick="openEditAdminStatsModal()" style="cursor: pointer;" title="Click to edit Available Doctors">
+              <div class="metric-data">
+                <h4>Available Doctors</h4>
+                <div class="value" id="stat-total-doctors">142</div>
+              </div>
+              <div class="metric-icon-wrap metric-icon-green"><i class="fas fa-user-md"></i></div>
+            </div>
+
+            <div class="dash-metric-card" onclick="openEditAdminStatsModal()" style="cursor: pointer;" title="Click to edit Today's Appointments">
+              <div class="metric-data">
+                <h4>Today's Appointments</h4>
+                <div class="value" id="stat-total-appts">328</div>
+              </div>
+              <div class="metric-icon-wrap metric-icon-amber"><i class="far fa-calendar-check"></i></div>
+            </div>
+
+            <div class="dash-metric-card" onclick="openEditAdminStatsModal()" style="cursor: pointer;" title="Click to edit Active Medical Camps">
+              <div class="metric-data">
+                <h4>Active Medical Camps</h4>
+                <div class="value" id="stat-total-camps">3</div>
+              </div>
+              <div class="metric-icon-wrap metric-icon-purple"><i class="fas fa-campground"></i></div>
+            </div>
+          </div>
+
+          <!-- Middle Row: Patient Admission Chart & Camp Schedule (Matches Photo 23) -->
+          <div style="display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 24px; margin-bottom: 28px;">
+            
+            <!-- Admission Chart Box -->
+            <div class="card" style="padding: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="color: #0b2545; font-size: 1.15rem;">Patient Admission & Appointments</h3>
+                <span class="badge badge-blue">Weekly View</span>
+              </div>
+
+              <!-- SVG Curve Graph matching photo 23 -->
+              <svg viewBox="0 0 500 180" width="100%" height="160" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0284c7" stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="#0284c7" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M 0,140 Q 60,60 125,75 T 250,90 T 375,40 T 500,80 L 500,180 L 0,180 Z" fill="url(#chartGrad)"/>
+                <path d="M 0,140 Q 60,60 125,75 T 250,90 T 375,40 T 500,80" fill="none" stroke="#0284c7" stroke-width="3"/>
+                <circle cx="125" cy="75" r="4" fill="#0284c7" />
+                <circle cx="250" cy="90" r="4" fill="#0284c7" />
+                <circle cx="375" cy="40" r="4" fill="#0284c7" />
+              </svg>
+
+              <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); padding: 0 10px;">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+              </div>
+            </div>
+
+            <!-- Announcement Queue (Matches Photo 23) -->
+            <div class="card" style="padding: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="color: #0b2545; font-size: 1.15rem;">Announcement Queue</h3>
+                <button onclick="openAddNotificationModal()" class="btn btn-outline btn-sm">+ Post New</button>
+              </div>
+
+              <div style="background: #f8fafc; padding: 12px 16px; border-radius: 8px; margin-bottom: 12px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h4 style="font-size: 0.92rem; color: #0b2545;">Blood Donation Camp - Nov 28</h4>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Drafted and published across web banners.</div>
+                </div>
+                <span class="badge badge-green">Published</span>
+              </div>
+
+              <div style="background: #f8fafc; padding: 12px 16px; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <h4 style="font-size: 0.92rem; color: #0b2545;">Clinic Hours Update</h4>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Outpatient schedules revised for Block A.</div>
+                </div>
+                <span class="badge badge-blue">Active</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Quick User Management Table Preview -->
+          <div class="dash-table-wrapper">
+            <div class="dash-table-header" style="flex-wrap: wrap; gap: 10px;">
+              <h3 class="dash-table-title">System User Accounts & Authorization</h3>
+              <div style="display: flex; gap: 8px;">
+                <button onclick="openCreateStaffModal()" class="btn btn-sm" style="background: #10b981; color: white; border: none; font-weight: 700;">
+                  <i class="fas fa-user-plus"></i> Create Staff Account
+                </button>
+                <button onclick="switchDashTab('pane-admin-users')" class="btn btn-primary btn-sm">
+                  Full User Management
+                </button>
+              </div>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>User Name</th>
+                    <th>Email Address</th>
+                    <th>Phone</th>
+                    <th>System Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-users-tbody">
+                  <!-- Loaded dynamically by dashboard.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ==========================================
+             PANE 2: MANAGE NOTIFICATIONS (Add & Update)
+             ========================================== -->
+        <div id="pane-admin-notifs" class="dash-tab-pane">
+          <div class="dash-table-wrapper">
+            <div class="dash-table-header">
+              <div>
+                <h3 class="dash-table-title">Manage Hospital Notifications & Announcements</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 2px;">
+                  Create, update, and manage public notices, camp bulletins, schedule updates, and emergency alerts.
+                </p>
+              </div>
+              <button onclick="openAddNotificationModal()" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add New Notification
+              </button>
+            </div>
+            
+            <div style="overflow-x: auto;">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Message</th>
+                    <th>Published Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-notifs-tbody">
+                  <!-- Populated dynamically by dashboard.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             PANE 3: MANAGE USERS & ROLES
+             ========================================== -->
+        <div id="pane-admin-users" class="dash-tab-pane">
+          <div class="dash-table-wrapper">
+            <div class="dash-table-header" style="flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h3 class="dash-table-title">User Accounts & Role Permissions</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 2px;">
+                  Assign roles (REGISTERED_USER, STAFF, ADMIN) and activate or suspend accounts.
+                </p>
+              </div>
+              <button onclick="openCreateStaffModal()" class="btn btn-primary btn-sm">
+                <i class="fas fa-user-plus"></i> Create Staff Account
+              </button>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>User Name</th>
+                    <th>Email Address</th>
+                    <th>Phone</th>
+                    <th>System Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-users-tbody-full">
+                  <!-- Loaded dynamically by dashboard.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             PANE 4: MANAGE LOCATIONS (Admin: Add & Update Details)
+             ========================================== -->
+        <div id="pane-admin-locations" class="dash-tab-pane">
+          <div class="dash-table-wrapper">
+            <div class="dash-table-header" style="flex-wrap: wrap; gap: 10px;">
+              <div>
+                <h3 class="dash-table-title">Hospital Locations & Department Management</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 2px;">
+                  Add new hospital facilities, update room numbers, opening hours, descriptions, and walking directions.
+                </p>
+              </div>
+              <button onclick="openAddLocationModal()" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add New Location
+              </button>
+            </div>
+            
+            <div style="overflow-x: auto;">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Location Name</th>
+                    <th>Category</th>
+                    <th>Building & Floor</th>
+                    <th>Room</th>
+                    <th>Hours</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-locations-tbody">
+                  <!-- Populated dynamically by dashboard.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             PANE 5: HOSPITAL INFORMATION MANAGEMENT (Edit & Update Public Info)
+             ========================================== -->
+        <div id="pane-admin-hospital-info" class="dash-tab-pane">
+          <div class="dash-table-wrapper" style="padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 16px;">
+              <div>
+                <h3 style="font-size: 1.3rem; color: #0b2545; margin-bottom: 4px;">
+                  <i class="fas fa-hospital" style="color: var(--primary);"></i> Hospital Information & Public Portal Management
+                </h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">
+                  Edit and update the hospital overview, 24/7 emergency protocol, visiting hours, and contact details visible to guest users.
+                </p>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <a href="hospital-info.html" target="_blank" class="btn btn-outline btn-sm">
+                  <i class="fas fa-external-link-alt"></i> Preview Public Page
+                </a>
+                <button onclick="submitAdminHospitalInfo()" class="btn btn-primary btn-sm">
+                  <i class="fas fa-save"></i> Save & Update Information
+                </button>
+              </div>
+            </div>
+
+            <!-- Form Cards Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              
+              <!-- Card 1: Branding & Hero -->
+              <div class="card" style="padding: 20px;">
+                <h4 style="color: #0b2545; margin-bottom: 14px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-heading" style="color: var(--primary);"></i> Hospital Branding & Hero Header
+                </h4>
+                <div class="form-group">
+                  <label class="form-label">Hospital Brand Name *</label>
+                  <input type="text" id="admin-info-name" class="form-control" placeholder="HealthWay Hospital">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Hospital Motto / Tagline</label>
+                  <input type="text" id="admin-info-tagline" class="form-control" placeholder="Care • Locate • Heal">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Hero Title</label>
+                  <input type="text" id="admin-info-hero-title" class="form-control" placeholder="About HealthWay Hospital">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Hero Subtitle / Description</label>
+                  <textarea id="admin-info-hero-subtitle" class="form-control" rows="3" placeholder="Short description..."></textarea>
+                </div>
+              </div>
+
+              <!-- Card 2: 24/7 Emergency Protocol -->
+              <div class="card" style="padding: 20px; border-left: 4px solid #ef4444;">
+                <h4 style="color: #991b1b; margin-bottom: 14px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-ambulance"></i> 24/7 Emergency & Critical Care Protocol
+                </h4>
+                <div class="form-group">
+                  <label class="form-label">Emergency 24/7 Hotline Number *</label>
+                  <input type="text" id="admin-info-emergency-hotline" class="form-control" placeholder="+94 11 123 4567 (Ext 1)">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Emergency Protocol & Admissions Instruction</label>
+                  <textarea id="admin-info-emergency-text" class="form-control" rows="5" placeholder="Emergency instructions for patients..."></textarea>
+                </div>
+              </div>
+
+              <!-- Card 3: Clinical Overview, Mission & Vision -->
+              <div class="card" style="padding: 20px;">
+                <h4 style="color: #0b2545; margin-bottom: 14px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-stethoscope" style="color: var(--primary);"></i> Clinical Overview, Mission & Vision
+                </h4>
+                <div class="form-group">
+                  <label class="form-label">Clinical Overview Narrative</label>
+                  <textarea id="admin-info-clinical-overview" class="form-control" rows="4" placeholder="Detailed hospital summary..."></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Our Mission</label>
+                  <input type="text" id="admin-info-mission" class="form-control" placeholder="Our mission statement...">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Our Vision</label>
+                  <input type="text" id="admin-info-vision" class="form-control" placeholder="Our vision statement...">
+                </div>
+              </div>
+
+              <!-- Card 4: Visitor Guidelines & Ward Hours -->
+              <div class="card" style="padding: 20px;">
+                <h4 style="color: #0b2545; margin-bottom: 14px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-clock" style="color: var(--primary);"></i> Visiting Hours & Guidelines
+                </h4>
+                <div class="form-group">
+                  <label class="form-label">General Inpatient Ward (Block E)</label>
+                  <input type="text" id="admin-info-hours-general" class="form-control" placeholder="11:00 AM - 1:00 PM | 5:00 PM - 7:00 PM">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Pediatrics & Children's Ward (Block D)</label>
+                  <input type="text" id="admin-info-hours-pediatrics" class="form-control" placeholder="10:00 AM - 12:00 PM | 4:00 PM - 7:00 PM">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Intensive Care Unit (ICU - Block A)</label>
+                  <input type="text" id="admin-info-hours-icu" class="form-control" placeholder="4:00 PM - 5:00 PM (Direct family only)">
+                </div>
+              </div>
+
+              <!-- Card 5: Contact & Location Amenities (Spans full width) -->
+              <div class="card" style="padding: 20px; grid-column: 1 / -1;">
+                <h4 style="color: #0b2545; margin-bottom: 14px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-map-pin" style="color: var(--primary);"></i> Contact Details & Visitor Amenities
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                  <div class="form-group">
+                    <label class="form-label">Hospital Physical Address</label>
+                    <input type="text" id="admin-info-address" class="form-control" placeholder="123 Health Street, Colombo 00700, Sri Lanka">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">General Inquiry & Token Desk Phones</label>
+                    <input type="text" id="admin-info-phone" class="form-control" placeholder="+94 11 123 4567 / +94 11 123 4568">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Public Email Address</label>
+                    <input type="email" id="admin-info-email" class="form-control" placeholder="info@healthway.hospital">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Visitor Car Parking Info</label>
+                    <input type="text" id="admin-info-parking" class="form-control" placeholder="500+ multi-level covered bays...">
+                  </div>
+                </div>
+
+                <div style="margin-top: 16px; display: flex; justify-content: flex-end; gap: 10px;">
+                  <button onclick="submitAdminHospitalInfo()" class="btn btn-primary" style="padding: 10px 24px;">
+                    <i class="fas fa-save"></i> Save & Update Hospital Information
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==========================================
+       MODAL 1: ADD NOTIFICATION (Admin Feature)
+       ========================================== -->
+  <div id="admin-add-notif-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-bullhorn" style="color: var(--primary);"></i> Add Hospital Notification</h3>
+        <button onclick="closeModal('admin-add-notif-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Notification Title *</label>
+          <input type="text" id="new-notif-title" class="form-control" placeholder="E.g. Free Eye Screening Camp Registration Open" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="new-notif-category" class="form-control">
+              <option value="CAMP">CAMP</option>
+              <option value="ANNOUNCEMENT">ANNOUNCEMENT</option>
+              <option value="SCHEDULE_CHANGE">SCHEDULE_CHANGE</option>
+              <option value="SERVICE_INTERRUPTION">SERVICE_INTERRUPTION</option>
+              <option value="GENERAL">GENERAL</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status *</label>
+            <select id="new-notif-status" class="form-control">
+              <option value="PUBLISHED">PUBLISHED</option>
+              <option value="DRAFT">DRAFT</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Expiry Date</label>
+          <input type="date" id="new-notif-expiry" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Announcement Message *</label>
+          <textarea id="new-notif-message" class="form-control" rows="4" placeholder="Write full notification details for patients and visitors..." required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('admin-add-notif-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitAddNotification()" class="btn btn-primary btn-sm">Publish Notification</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 2: UPDATE NOTIFICATION (Admin Feature)
+       ========================================== -->
+  <div id="admin-edit-notif-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-edit" style="color: var(--primary);"></i> Update Notification</h3>
+        <button onclick="closeModal('admin-edit-notif-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-notif-id">
+        <div class="form-group">
+          <label class="form-label">Title *</label>
+          <input type="text" id="edit-notif-title" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="edit-notif-category" class="form-control">
+              <option value="CAMP">CAMP</option>
+              <option value="ANNOUNCEMENT">ANNOUNCEMENT</option>
+              <option value="SCHEDULE_CHANGE">SCHEDULE_CHANGE</option>
+              <option value="SERVICE_INTERRUPTION">SERVICE_INTERRUPTION</option>
+              <option value="GENERAL">GENERAL</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status *</label>
+            <select id="edit-notif-status" class="form-control">
+              <option value="PUBLISHED">PUBLISHED</option>
+              <option value="DRAFT">DRAFT</option>
+              <option value="ARCHIVED">ARCHIVED</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Message *</label>
+          <textarea id="edit-notif-message" class="form-control" rows="4" required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('admin-edit-notif-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitEditNotification()" class="btn btn-primary btn-sm">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 3: ADD HOSPITAL LOCATION (Admin Feature)
+       ========================================== -->
+  <div id="admin-add-location-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> Add Hospital Location</h3>
+        <button onclick="closeModal('admin-add-location-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Location / Department Name *</label>
+          <input type="text" id="new-loc-name" class="form-control" placeholder="E.g. Cardiology Clinic" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="new-loc-category" class="form-control">
+              <option value="CLINICAL_DEPARTMENT">Clinical Department</option>
+              <option value="OUTPATIENT_CLINIC">Outpatient Clinic</option>
+              <option value="EMERGENCY_SERVICE">Emergency Service</option>
+              <option value="DIAGNOSTIC_SERVICE">Diagnostic Service</option>
+              <option value="INPATIENT_WARD">Inpatient Ward</option>
+              <option value="VISITOR_FACILITY">Visitor Facility / Amenity</option>
+              <option value="ADMINISTRATIVE">Administrative</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Building *</label>
+            <input type="text" id="new-loc-building" class="form-control" value="Main Building (Block A)" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Floor *</label>
+            <select id="new-loc-floor" class="form-control">
+              <option value="Ground Floor">Ground Floor</option>
+              <option value="1st Floor">1st Floor</option>
+              <option value="2nd Floor">2nd Floor</option>
+              <option value="3rd Floor">3rd Floor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Room Number</label>
+            <input type="text" id="new-loc-room" class="form-control" placeholder="E.g. RM-304">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Opening Hours</label>
+            <input type="text" id="new-loc-hours" class="form-control" value="08:00 AM - 05:00 PM" placeholder="E.g. 24 Hours Open">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select id="new-loc-status" class="form-control">
+              <option value="OPEN">OPEN</option>
+              <option value="RESTRICTED">RESTRICTED</option>
+              <option value="CLOSED">CLOSED</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description & Services</label>
+          <textarea id="new-loc-desc" class="form-control" rows="2" placeholder="Describe the unit, doctor consultations, or diagnostic care provided..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Standard Walking Directions</label>
+          <input type="text" id="new-loc-directions" class="form-control" placeholder="E.g. Take Elevator A to 2nd Floor, turn right and follow signs.">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('admin-add-location-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitAddLocation()" class="btn btn-primary btn-sm">Create Location</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 4: EDIT HOSPITAL LOCATION (Admin Feature)
+       ========================================== -->
+  <div id="admin-edit-location-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-edit" style="color: var(--primary);"></i> Edit Location Details</h3>
+        <button onclick="closeModal('admin-edit-location-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-loc-id">
+
+        <div class="form-group">
+          <label class="form-label">Location / Department Name *</label>
+          <input type="text" id="edit-loc-name" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <input type="text" id="edit-loc-category" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Building *</label>
+            <input type="text" id="edit-loc-building" class="form-control" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Floor *</label>
+            <select id="edit-loc-floor" class="form-control">
+              <option value="Ground Floor">Ground Floor</option>
+              <option value="1st Floor">1st Floor</option>
+              <option value="2nd Floor">2nd Floor</option>
+              <option value="3rd Floor">3rd Floor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Room Number</label>
+            <input type="text" id="edit-loc-room" class="form-control">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Opening Hours</label>
+            <input type="text" id="edit-loc-hours" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select id="edit-loc-status" class="form-control">
+              <option value="OPEN">OPEN</option>
+              <option value="RESTRICTED">RESTRICTED</option>
+              <option value="CLOSED">CLOSED</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description & Services</label>
+          <textarea id="edit-loc-desc" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Standard Walking Directions</label>
+          <input type="text" id="edit-loc-directions" class="form-control"></input>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('admin-edit-location-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitEditLocation()" class="btn btn-primary btn-sm">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 5: EDIT ADMIN DASHBOARD METRICS
+       ========================================== -->
+  <div id="admin-edit-stats-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-edit" style="color: var(--primary);"></i> Edit Hospital Key Metrics</h3>
+        <button onclick="closeModal('admin-edit-stats-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+          Update high-level system totals displayed on the executive dashboard overview.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label">Total Registered Patients *</label>
+          <input type="number" id="edit-stat-patients" class="form-control" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Available Doctors On-Duty *</label>
+          <input type="number" id="edit-stat-doctors" class="form-control" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Today's Total Appointments *</label>
+          <input type="number" id="edit-stat-appts" class="form-control" min="0" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Active Medical Camps *</label>
+          <input type="number" id="edit-stat-camps" class="form-control" min="0" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('admin-edit-stats-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitEditAdminStats()" class="btn btn-primary btn-sm">Save Metrics</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 6: CREATE STAFF ACCOUNT (Admin Feature)
+       ========================================== -->
+  <div id="admin-create-staff-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-user-plus" style="color: var(--primary);"></i> Create New Staff Account</h3>
+        <button onclick="closeModal('admin-create-staff-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Staff Member Full Name *</label>
+          <input type="text" id="new-staff-fullname" class="form-control" placeholder="E.g. Dr. Kasun Bandara" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hospital Email Address *</label>
+          <input type="email" id="new-staff-email" class="form-control" placeholder="staff.kasun@healthway.hospital" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contact Phone Number</label>
+          <input type="text" id="new-staff-phone" class="form-control" placeholder="+94 77 987 6543">
+        </div>
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Assigned Department / Ward *</label>
+            <input type="text" id="new-staff-department" class="form-control" placeholder="Cardiology Ward A" value="Cardiology">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Assigned Shift *</label>
+            <select id="new-staff-shift" class="form-control">
+              <option value="08:00 AM - 04:00 PM">08:00 AM - 04:00 PM (Morning)</option>
+              <option value="04:00 PM - 12:00 AM">04:00 PM - 12:00 AM (Evening)</option>
+              <option value="12:00 AM - 08:00 AM">12:00 AM - 08:00 AM (Night)</option>
+              <option value="24 Hours On-Call">24 Hours On-Call</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Initial Password *</label>
+          <input type="password" id="new-staff-password" class="form-control" value="Password@123" required>
+          <small style="color: var(--text-muted); font-size: 0.75rem;">Default password: Password@123. Staff can edit their password anytime.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('admin-create-staff-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitCreateStaff()" class="btn btn-primary btn-sm">Create Staff Account</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

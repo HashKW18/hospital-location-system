@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Location Finder - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-heartbeat fa-lg"></i>
+        </div>
+        <div class="brand-text">
+          <h1>HealthWay Hospital</h1>
+          <span>Care &bull; Locate &bull; Heal</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="locations.html" class="nav-link active"><i class="fas fa-map-marker-alt"></i> Find Locations</a></li>
+        <li><a href="hospital-info.html" class="nav-link"><i class="fas fa-info-circle"></i> Hospital Information</a></li>
+        <li><a href="medical-camps.html" class="nav-link"><i class="fas fa-calendar-alt"></i> Medical Camps</a></li>
+        <li><a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="feedback.html" class="nav-link"><i class="fas fa-comment-medical"></i> Feedback</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-actions"></div>
+    </div>
+  </nav>
+
+  <!-- Location Finder Header (Matches Photo 13) -->
+  <section style="background: linear-gradient(135deg, #e8f3fc 0%, #f0f7ff 100%); padding: 36px 0; border-bottom: 1px solid #dbeafe;">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 52px; height: 52px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.6rem; box-shadow: var(--shadow-sm);">
+            <i class="fas fa-map-marked-alt"></i>
+          </div>
+          <div>
+            <h1 style="color: #0b2545; font-size: 2.2rem; font-weight: 800; line-height: 1.2;">Hospital Location Finder</h1>
+            <p style="color: var(--text-secondary); font-size: 1rem;">Find departments, rooms and facilities easily &bull; <em style="color: var(--primary);">Your Health, Our Priority &#9825;</em></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Input in Header -->
+      <div style="display: flex; gap: 10px; width: 100%; max-width: 540px; background: white; padding: 6px; border-radius: var(--radius-full); box-shadow: var(--shadow-sm); border: 1px solid #bfdbfe;">
+        <input type="text" id="location-search-input" placeholder="Search for location... (e.g. Laboratory, Pharmacy, Cashier)" class="form-control" style="border: none; padding-left: 16px;">
+        <button onclick="renderLocations()" class="btn btn-primary" style="padding: 8px 24px;">
+          <i class="fas fa-search"></i> Search
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout (Matches Photo 13 Grid) -->
+  <main class="container section-padding" style="padding-top: 36px;">
+    <div style="display: grid; grid-template-columns: 240px 1fr 340px; gap: 24px; align-items: start;">
+      
+      <!-- LEFT SIDEBAR: Categories Filter (Matches Photo 13) -->
+      <aside style="background: white; border-radius: var(--radius-md); border: 1px solid var(--border-color); padding: 18px; box-shadow: var(--shadow-sm);">
+        <h3 style="font-size: 1.05rem; font-weight: 700; color: #0b2545; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+          <i class="fas fa-th-large" style="color: var(--primary);"></i> Categories
+        </h3>
+        <ul id="category-filter-list" style="list-style: none;">
+          <!-- Loaded dynamically by locations.js -->
+        </ul>
+      </aside>
+
+      <!-- CENTER: Location Cards Grid -->
+      <section>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div id="location-count-badge" style="font-weight: 700; color: #0b2545; font-size: 0.95rem;">
+            Loading locations...
+          </div>
+          <button onclick="clearFilters()" class="btn btn-outline btn-sm">
+            <i class="fas fa-undo"></i> Reset Filters
+          </button>
+        </div>
+
+        <div id="locations-grid" class="grid-2">
+          <!-- Loaded dynamically by locations.js -->
+        </div>
+      </section>
+
+      <!-- RIGHT SIDEBAR: Hospital Map Preview & Interactive Floor Guide (Matches Photo 13) -->
+      <aside>
+        <div class="map-interactive-container">
+          <div class="map-controls-header">
+            <div style="display: flex; align-items: center; gap: 8px; font-weight: 700;">
+              <i class="fas fa-map"></i> Hospital Map
+            </div>
+            <div class="floor-tabs">
+              <button class="floor-tab-btn active" data-floor="Ground Floor">Ground</button>
+              <button class="floor-tab-btn" data-floor="1st Floor">1st Fl</button>
+              <button class="floor-tab-btn" data-floor="2nd Floor">2nd Fl</button>
+              <button class="floor-tab-btn" data-floor="3rd Floor">3rd Fl</button>
+            </div>
+          </div>
+
+          <!-- Interactive 3D Architectural Floor Plan (Uses images from Floor Maps folder) -->
+          <div class="floor-map-preview-wrapper" id="floor-map-preview-container">
+            <!-- Rendered dynamically by locations.js -->
+          </div>
+
+          <div style="padding: 10px 16px 14px 16px; background: white; border-top: 1px solid var(--border-color);">
+            <button onclick="openFullMapModal()" class="btn btn-outline btn-sm btn-block" style="font-size: 0.84rem; font-weight: 700;">
+              <i class="fas fa-expand-arrows-alt"></i> View Enlarged High-Resolution Map
+            </button>
+          </div>
+        </div>
+
+        <!-- Need Directions Box (Matches Photo 13 bottom-right widget) -->
+        <div class="card" style="margin-top: 20px; background: #f0f7ff; border-color: #bfdbfe;">
+          <div style="display: flex; gap: 14px; align-items: flex-start;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;">
+              <i class="fas fa-route"></i>
+            </div>
+            <div>
+              <h4 style="color: #0b2545; font-size: 1.05rem; margin-bottom: 4px;">Need Directions?</h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.4;">
+                Get step-by-step walking directions to your selected clinic from any hospital entrance.
+              </p>
+              <button onclick="openDirectionsModal(1)" class="btn btn-primary btn-sm" style="margin-top: 12px; width: 100%;">
+                <i class="fas fa-location-arrow"></i> Open Directions Guide
+              </button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Location Details Modal -->
+  <div id="location-details-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Facility Information</h3>
+        <button onclick="closeModal('location-details-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="location-details-content">
+        <!-- Content filled dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('location-details-modal')" class="btn btn-outline btn-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Turn-by-Turn Directions Modal -->
+  <div id="directions-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-route" style="color: var(--primary);"></i> Navigation & Directions</h3>
+        <button onclick="closeModal('directions-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="directions-modal-content">
+        <!-- Filled dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('directions-modal')" class="btn btn-primary btn-sm">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Hospital Blueprint Modal (High-Resolution 3D Architectural Map) -->
+  <div id="full-map-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 1150px; width: 96%; max-height: 94vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-map-marked-alt" style="color: var(--primary);"></i> HealthWay Hospital - 3D Architectural Floor Blueprint</h3>
+        <button onclick="closeModal('full-map-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 16px; overflow-y: auto;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+          <div>
+            <div style="font-weight: 800; font-size: 1.15rem; color: #0b2545;" id="full-map-title">Ground Floor - Main Medical Complex & Trauma Unit</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);" id="full-map-subtitle">Click and drag or use zoom buttons to inspect detailed room layouts and corridors.</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <div class="floor-tabs" id="full-map-tabs">
+              <button class="btn btn-sm btn-outline active" onclick="setFullMapFloor('Ground Floor')">Ground</button>
+              <button class="btn btn-sm btn-outline" onclick="setFullMapFloor('1st Floor')">1st Fl</button>
+              <button class="btn btn-sm btn-outline" onclick="setFullMapFloor('2nd Floor')">2nd Fl</button>
+              <button class="btn btn-sm btn-outline" onclick="setFullMapFloor('3rd Floor')">3rd Fl</button>
+            </div>
+            <div class="full-map-controls">
+              <button class="zoom-btn" onclick="zoomFullMap(1.2)" title="Zoom In"><i class="fas fa-search-plus"></i></button>
+              <button class="zoom-btn" onclick="zoomFullMap(0.8)" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
+              <button class="zoom-btn" onclick="resetFullMapZoom()" title="Reset Zoom"><i class="fas fa-redo-alt"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Image Display Viewport -->
+        <div class="full-map-viewport" id="full-map-viewport">
+          <img id="full-map-image-element" src="images/floor-maps/Hospital_ground_floor.jpg" alt="HealthWay Hospital 3D Architectural Floor Blueprint" />
+        </div>
+
+        <!-- Interactive Department Quick Directory for Active Floor -->
+        <div style="margin-top: 16px;">
+          <h4 style="font-size: 0.92rem; color: #0b2545; font-weight: 700; margin-bottom: 8px;">
+            <i class="fas fa-list-ul" style="color: var(--primary);"></i> Facilities & Departments on this Level:
+          </h4>
+          <div id="full-map-department-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px;">
+            <!-- Rendered by locations.js -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('full-map-modal')" class="btn btn-outline btn-sm">Close Map</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 HealthWay Hospital. All rights reserved.</div>
+        <div class="footer-tagline">Healthy Community, Stronger Tomorrow &#9825;</div>
+        <div>Demonstration project for university academic evaluation.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/locations.js"></script>
+  <script>
+    // Handle URL search parameter if passed from home page
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchParam = urlParams.get('search');
+      if (searchParam) {
+        document.getElementById('location-search-input').value = searchParam;
+        currentSearch = searchParam;
+      }
+      const catParam = urlParams.get('category');
+      if (catParam) {
+        currentCategory = catParam;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Medical Camps - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fas fa-heartbeat fa-lg"></i>
+        </div>
+        <div class="brand-text">
+          <h1>HealthWay Hospital</h1>
+          <span>Care &bull; Locate &bull; Heal</span>
+        </div>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="locations.html" class="nav-link"><i class="fas fa-map-marker-alt"></i> Find Locations</a></li>
+        <li><a href="hospital-info.html" class="nav-link"><i class="fas fa-info-circle"></i> Hospital Information</a></li>
+        <li><a href="medical-camps.html" class="nav-link active"><i class="fas fa-calendar-alt"></i> Medical Camps</a></li>
+        <li><a href="notifications.html" class="nav-link"><i class="fas fa-bell"></i> Notifications</a></li>
+        <li><a href="feedback.html" class="nav-link"><i class="fas fa-comment-medical"></i> Feedback</a></li>
+      </ul>
+
+      <div class="nav-actions" id="nav-auth-actions"></div>
+    </div>
+  </nav>
+
+  <!-- Hero Section (Matches Photo 27) -->
+  <section class="hero-section" style="padding: 40px 0 50px 0;">
+    <div class="container hero-content">
+      <div class="hero-text">
+        <span class="badge badge-free" style="margin-bottom: 12px; font-size: 0.85rem; padding: 6px 14px;">COMMUNITY OUTREACH</span>
+        <h1 style="font-size: 2.8rem; margin-bottom: 12px;">Free Medical Camps</h1>
+        <p>
+          Providing quality healthcare to our community. Explore, register, and attend our upcoming free health checkups and specialized wellness screening clinics.
+        </p>
+      </div>
+      <div class="hero-image-wrapper" style="height: 240px;">
+        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80" alt="Medical Camp Screening" style="height: 100%;">
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Controls (Matches Photo 27) -->
+  <section style="background: white; border-bottom: 1px solid var(--border-color); padding: 20px 0;">
+    <div class="container" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+      
+      <!-- Search Input -->
+      <div style="flex: 1; min-width: 260px; position: relative;">
+        <i class="fas fa-search" style="position: absolute; left: 14px; top: 14px; color: var(--text-light);"></i>
+        <input type="text" id="camp-search-input" placeholder="Search by camp name or keyword..." class="form-control" style="padding-left: 38px; border-radius: var(--radius-full);">
+      </div>
+
+      <!-- Camp Type Filter -->
+      <div style="width: 220px;">
+        <select id="camp-category-filter" class="form-control" style="border-radius: var(--radius-full);">
+          <option value="All">All Camp Types</option>
+          <option value="General Health">General Health Checkup</option>
+          <option value="Dental Checkup">Dental & Oral Health</option>
+          <option value="Blood Donation">Blood Donation Drive</option>
+          <option value="Eye Checkup">Eye & Vision Screening</option>
+          <option value="Vaccination & Pediatric">Pediatric & Wellness</option>
+        </select>
+      </div>
+
+      <!-- Upcoming vs Past Toggle Tabs -->
+      <div style="display: flex; background: #f1f5f9; padding: 4px; border-radius: var(--radius-full);">
+        <button class="btn btn-sm btn-primary" style="border-radius: var(--radius-full);">Upcoming Camps</button>
+        <button class="btn btn-sm" style="background: transparent; color: var(--text-secondary); border-radius: var(--radius-full);" onclick="showToast('Past medical camps archive loaded', 'success')">Past Camps</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Medical Camps Grid (Matches Photo 27) -->
+  <main class="container section-padding">
+    <div id="camps-grid" class="grid-3">
+      <!-- Loaded dynamically by camps.js -->
+    </div>
+  </main>
+
+  <!-- Camp Details Modal -->
+  <div id="camp-details-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Medical Camp Details</h3>
+        <button onclick="closeModal('camp-details-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="camp-details-modal-content"></div>
+      <div class="modal-footer">
+        <button onclick="closeModal('camp-details-modal')" class="btn btn-outline btn-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Camp Registration Modal -->
+  <div id="camp-register-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Registration</h3>
+        <button onclick="closeModal('camp-register-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body" id="camp-register-modal-content"></div>
+      <div class="modal-footer">
+        <button onclick="closeModal('camp-register-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitCampRegistration()" class="btn btn-primary btn-sm">Confirm Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <div>&copy; 2026 HealthWay Hospital. All rights reserved.</div>
+        <div class="footer-tagline">Healthy Community, Stronger Tomorrow &#9825;</div>
+        <div>Demonstration project for university academic evaluation.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/camps.js"></script>
+</body>
+</html>

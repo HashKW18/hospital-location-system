@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard - HealthWay Hospital</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <style>
+    /* Custom refinements matching Photo 21 / Image 3 exactly */
+    .staff-grid-layout {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 1100px) {
+      .staff-grid-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .badge-in-progress {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1px solid #bae6fd;
+    }
+    .badge-waiting {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+    .badge-scheduled {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+    .alert-card-danger {
+      background: #fee2e2;
+      border-left: 4px solid #ef4444;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .alert-card-warning {
+      background: #ffedd5;
+      border-left: 4px solid #f97316;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .alert-card-amber {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .progress-bar-wrap {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0284c7, #0ea5e9);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-layout">
+    <!-- LEFT SIDEBAR (Matches Photo 21 / Image 3) -->
+    <aside class="dash-sidebar">
+      <div class="dash-sidebar-header">
+        <div class="brand-icon" style="width: 36px; height: 36px; font-size: 1rem;">
+          <i class="fas fa-heartbeat"></i>
+        </div>
+        <div class="brand-text">
+          <h2>HealthWay</h2>
+          <span>STAFF PORTAL</span>
+        </div>
+      </div>
+
+      <ul class="dash-nav">
+        <li class="dash-nav-item">
+          <a class="dash-nav-link active" onclick="switchDashTab('pane-staff-dashboard', this)">
+            <i class="fas fa-th-large"></i> Dashboard
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-staff-camps', this)">
+            <i class="fas fa-calendar-plus"></i> Medical Camps
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a class="dash-nav-link" onclick="switchDashTab('pane-staff-feedback', this)">
+            <i class="fas fa-comment-dots"></i> Patient Feedback
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="locations.html" class="dash-nav-link">
+            <i class="fas fa-map-marked-alt"></i> Find Locations
+          </a>
+        </li>
+        <li class="dash-nav-item">
+          <a href="index.html" class="dash-nav-link">
+            <i class="fas fa-globe"></i> View Public Site
+          </a>
+        </li>
+      </ul>
+
+      <!-- Staff On-Duty Card at Bottom (Matches Photo 21) -->
+      <div class="dash-sidebar-footer">
+        <div class="dash-user-card" style="background: rgba(255, 255, 255, 0.08); padding: 12px; cursor: pointer;" onclick="openStaffEditProfileModal()" title="Click to edit your staff profile">
+          <div class="avatar" id="staff-sidebar-avatar" style="background: #0284c7; color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            SJ
+          </div>
+          <div class="info">
+            <div class="name" id="staff-sidebar-name" style="font-size: 0.9rem;">Dr. Sarah Jenkins</div>
+            <div id="staff-sidebar-dept" style="font-size: 0.72rem; color: #94a3b8;">Cardiology</div>
+            <span class="badge badge-green" style="font-size: 0.65rem; padding: 2px 8px; margin-top: 4px;">
+              <i class="fas fa-circle" style="font-size: 0.5rem;"></i> On Shift
+            </span>
+          </div>
+        </div>
+        <button onclick="auth.logout()" class="btn btn-outline btn-sm btn-block" style="color: white; border-color: rgba(255,255,255,0.2);">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN BODY -->
+    <main class="dash-main">
+      <!-- Topbar (Matches Photo 21 / Image 3) -->
+      <header class="dash-topbar">
+        <div class="dash-topbar-search" style="width: 320px;">
+          <i class="fas fa-search" style="color: var(--text-light);"></i>
+          <input type="text" id="staff-search-input" placeholder="Search patients, schedules, records...">
+        </div>
+
+        <div class="dash-topbar-actions">
+          <div class="badge badge-blue" id="staff-topbar-ward-badge" style="font-size: 0.8rem; padding: 6px 12px; font-weight: 600;">
+            Cardiology Ward A - Level 3
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+            November 7, 2026 | 09:30 AM
+          </div>
+          <a href="notifications.html" class="topbar-icon-btn" title="Alerts">
+            <i class="far fa-bell"></i>
+            <span class="topbar-badge">2</span>
+          </a>
+          <a href="feedback.html" class="topbar-icon-btn" title="Messages">
+            <i class="far fa-comment-alt"></i>
+          </a>
+          <div style="display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="openStaffEditProfileModal()" title="Click to edit your staff account">
+            <div class="avatar-circle" id="staff-topbar-avatar" style="width: 36px; height: 36px; background: #0284c7;">SJ</div>
+            <span id="staff-topbar-name" style="font-weight: 700; font-size: 0.92rem; color: #0b2545;">Dr. Sarah Jenkins</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <div class="dash-content">
+        
+        <!-- ==========================================
+             PANE 1: MAIN DASHBOARD (Photo 21 / Image 3)
+             ========================================== -->
+        <div id="pane-staff-dashboard" class="dash-tab-pane active">
+          
+          <!-- Welcome Banner with Active Shift & Stat Cards -->
+          <div class="dash-welcome-banner" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #0c4a6e 100%);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <h2 id="staff-greeting-name">Welcome back, Dr. Jenkins!</h2>
+                <p>Active shift: <span id="staff-shift-display">08:00 AM - 04:00 PM</span> &bull; <span id="staff-ward-display">Cardiology Ward A</span></p>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button onclick="openStaffEditProfileModal()" class="btn btn-sm" style="background: white; color: #0284c7; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+                  <i class="fas fa-user-edit"></i> Edit My Account
+                </button>
+                <button onclick="openEditStaffMetricsModal()" class="btn btn-sm" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4);">
+                  <i class="fas fa-edit"></i> Edit Shift & Metrics
+                </button>
+              </div>
+            </div>
+
+            <!-- 4 Stat Cards matching Photo 21 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; margin-top: 20px;">
+              <div class="stat-clickable-card" onclick="openEditStaffMetricsModal()" style="background: white; border-radius: 12px; padding: 14px 18px; color: #0b2545; cursor: pointer;" title="Click to edit metrics">
+                <div style="font-size: 0.78rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Today's Patients:</div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #0b2545; line-height: 1.1; margin-top: 4px;" id="staff-today-patients-val">18</div>
+              </div>
+              <div class="stat-clickable-card" onclick="openEditStaffMetricsModal()" style="background: white; border-radius: 12px; padding: 14px 18px; color: #0b2545; cursor: pointer;" title="Click to edit metrics">
+                <div style="font-size: 0.78rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Scheduled Appts:</div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #0b2545; line-height: 1.1; margin-top: 4px;" id="staff-scheduled-appts-val">8</div>
+              </div>
+              <div class="stat-clickable-card" onclick="openEditStaffMetricsModal()" style="background: white; border-radius: 12px; padding: 14px 18px; color: #0b2545; cursor: pointer;" title="Click to edit metrics">
+                <div style="font-size: 0.78rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Admitted Patients:</div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #0b2545; line-height: 1.1; margin-top: 4px;" id="staff-admitted-patients-val">12</div>
+              </div>
+              <div class="stat-clickable-card" onclick="openEditStaffMetricsModal()" style="background: white; border-radius: 12px; padding: 14px 18px; color: #0b2545; cursor: pointer;" title="Click to edit metrics">
+                <div style="font-size: 0.78rem; color: #64748b; font-weight: 700; text-transform: uppercase;">Pending Reports:</div>
+                <div style="font-size: 1.8rem; font-weight: 800; color: #0b2545; line-height: 1.1; margin-top: 4px;" id="staff-pending-reports-val">4</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2-Column Split matching Photo 21 / Image 3 -->
+          <div class="staff-grid-layout">
+            
+            <!-- LEFT: Today's Appointments Table (Matches Photo 21 exactly) -->
+            <div class="dash-table-wrapper">
+              <div class="dash-table-header" style="flex-wrap: wrap; gap: 10px;">
+                <div>
+                  <h3 class="dash-table-title">Today's Appointments</h3>
+                  <div style="font-size: 0.82rem; color: var(--text-muted);">Active daily clinical consultation queue</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <button onclick="openAddAppointmentModal()" class="btn btn-primary btn-sm">
+                    <i class="fas fa-plus"></i> Add Appointment
+                  </button>
+                  <a href="javascript:void(0)" onclick="refreshStaffAppointments()" class="btn btn-outline btn-sm" title="Refresh">
+                    <i class="fas fa-sync-alt"></i>
+                  </a>
+                </div>
+              </div>
+              <div style="overflow-x: auto;">
+                <table class="dash-table">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Patient Name</th>
+                      <th>Department</th>
+                      <th>Room</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="staff-appointments-tbody">
+                    <!-- Populated dynamically by dashboard.js matching Photo 21 -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- RIGHT: Ward Availability & Upcoming Tasks (Alerts removed as requested) -->
+            <div>
+              <!-- Ward Availability Card with Add / Edit Feature -->
+              <div class="card" style="padding: 24px; margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                  <h3 style="color: #0b2545; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-procedures" style="color: var(--primary);"></i> Ward Availability
+                  </h3>
+                  <button onclick="openManageWardsModal()" class="btn btn-outline btn-sm" style="font-size: 0.78rem; padding: 4px 10px;">
+                    <i class="fas fa-plus"></i> Add / Edit Ward
+                  </button>
+                </div>
+
+                <div id="staff-wards-container">
+                  <!-- Rendered dynamically by dashboard.js -->
+                </div>
+              </div>
+
+              <!-- Upcoming Tasks Card with Add Task & Functional View All -->
+              <div class="card" style="padding: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                  <h3 style="color: #0b2545; font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-clipboard-check" style="color: #10b981;"></i> Upcoming Tasks
+                  </h3>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <button onclick="openAddTaskModal()" class="btn btn-primary btn-sm" style="font-size: 0.78rem; padding: 4px 10px;">
+                      <i class="fas fa-plus"></i> Task
+                    </button>
+                    <a href="javascript:void(0)" onclick="openAllTasksModal()" style="font-size: 0.82rem; font-weight: 700; color: var(--primary);">View All &rarr;</a>
+                  </div>
+                </div>
+
+                <div id="staff-tasks-container">
+                  <!-- Rendered dynamically by dashboard.js -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ==========================================
+             PANE 2: MEDICAL CAMPS (Add & Update Details)
+             ========================================== -->
+        <div id="pane-staff-camps" class="dash-tab-pane">
+          <div class="dash-table-wrapper">
+            <div class="dash-table-header">
+              <div>
+                <h3 class="dash-table-title">Medical Camps Management</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 2px;">
+                  Add new medical camps, edit schedules, manage capacities and registration status.
+                </p>
+              </div>
+              <button onclick="openAddCampModal()" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add New Medical Camp
+              </button>
+            </div>
+            
+            <div style="overflow-x: auto;">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Camp Name</th>
+                    <th>Category</th>
+                    <th>Date & Time</th>
+                    <th>Hospital Location</th>
+                    <th>Registrations / Capacity</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="staff-camps-tbody">
+                  <!-- Populated dynamically by dashboard.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             PANE 3: PATIENT FEEDBACK (Review & Reply)
+             ========================================== -->
+        <div id="pane-staff-feedback" class="dash-tab-pane">
+          <div class="dash-table-wrapper">
+            <div class="dash-table-header">
+              <div>
+                <h3 class="dash-table-title">Patient Feedback & Resolution Queue</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 2px;">
+                  Review difficulties reported by patients and provide official staff responses.
+                </p>
+              </div>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Patient Name</th>
+                    <th>Category</th>
+                    <th>Message</th>
+                    <th>Status</th>
+                    <th>Staff Action</th>
+                  </tr>
+                </thead>
+                <tbody id="staff-feedback-tbody">
+                  <!-- Populated dynamically by dashboard.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==========================================
+       MODAL 1: ADD MEDICAL CAMP
+       ========================================== -->
+  <div id="staff-add-camp-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-calendar-plus" style="color: var(--primary);"></i> Add New Medical Camp</h3>
+        <button onclick="closeModal('staff-add-camp-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Camp Name *</label>
+          <input type="text" id="new-camp-name" class="form-control" placeholder="E.g. Free Cardiac & Hypertension Screening" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="new-camp-category" class="form-control">
+              <option value="General Health">General Health</option>
+              <option value="Dental Checkup">Dental Checkup</option>
+              <option value="Blood Donation">Blood Donation</option>
+              <option value="Eye Checkup">Eye Checkup</option>
+              <option value="Vaccination & Pediatric">Vaccination & Pediatric</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date *</label>
+            <input type="date" id="new-camp-date" class="form-control" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Start Time *</label>
+            <input type="time" id="new-camp-start" class="form-control" value="08:00" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Time *</label>
+            <input type="time" id="new-camp-end" class="form-control" value="13:00" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Location / Hall *</label>
+            <input type="text" id="new-camp-location" class="form-control" placeholder="Main Hospital Hall / Block A" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Patient Capacity *</label>
+            <input type="number" id="new-camp-capacity" class="form-control" value="100" min="1" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Camp Description & Services Offered</label>
+          <textarea id="new-camp-desc" class="form-control" rows="3" placeholder="Free consultations, BMI, ECG check, and sample medicines provided..."></textarea>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="new-camp-free" checked>
+          <label for="new-camp-free" style="font-weight: 600; font-size: 0.9rem;">Free Health Checkup (Mark as 100% Free)</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-add-camp-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitAddCamp()" class="btn btn-primary btn-sm">Create Medical Camp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 2: UPDATE / EDIT MEDICAL CAMP
+       ========================================== -->
+  <div id="staff-edit-camp-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-edit" style="color: var(--primary);"></i> Update Medical Camp Details</h3>
+        <button onclick="closeModal('staff-edit-camp-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-camp-id">
+        <div class="form-group">
+          <label class="form-label">Camp Name *</label>
+          <input type="text" id="edit-camp-name" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="edit-camp-category" class="form-control">
+              <option value="General Health">General Health</option>
+              <option value="Dental Checkup">Dental Checkup</option>
+              <option value="Blood Donation">Blood Donation</option>
+              <option value="Eye Checkup">Eye Checkup</option>
+              <option value="Vaccination & Pediatric">Vaccination & Pediatric</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status *</label>
+            <select id="edit-camp-status" class="form-control">
+              <option value="UPCOMING">UPCOMING</option>
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="COMPLETED">COMPLETED</option>
+              <option value="CANCELLED">CANCELLED</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Date *</label>
+            <input type="date" id="edit-camp-date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Capacity *</label>
+            <input type="number" id="edit-camp-capacity" class="form-control" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Start Time</label>
+            <input type="time" id="edit-camp-start" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Time</label>
+            <input type="time" id="edit-camp-end" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea id="edit-camp-desc" class="form-control" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-edit-camp-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitEditCamp()" class="btn btn-primary btn-sm">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 3: EDIT APPOINTMENT STATUS QUICK
+       ========================================== -->
+  <div id="staff-edit-appt-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Update Appointment Status</h3>
+        <button onclick="closeModal('staff-edit-appt-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-appt-id">
+        <p id="edit-appt-info" style="font-size: 0.95rem; color: #334155; margin-bottom: 16px;"></p>
+        <div class="form-group">
+          <label class="form-label">Change Status to:</label>
+          <select id="edit-appt-status-select" class="form-control">
+            <option value="Scheduled">Scheduled</option>
+            <option value="Waiting">Waiting</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-edit-appt-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitUpdateAppointmentStatus()" class="btn btn-primary btn-sm">Update Status</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 4: ADD NEW APPOINTMENT (Staff Feature)
+       ========================================== -->
+  <div id="staff-add-appt-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-calendar-plus" style="color: var(--primary);"></i> Add New Appointment</h3>
+        <button onclick="closeModal('staff-add-appt-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Patient Full Name *</label>
+          <input type="text" id="new-appt-patient" class="form-control" placeholder="E.g. James Carter" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Appointment Time *</label>
+            <input type="text" id="new-appt-time" class="form-control" placeholder="E.g. 10:45 AM" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Department *</label>
+            <select id="new-appt-dept" class="form-control">
+              <option value="Cardiology">Cardiology</option>
+              <option value="General Checkup">General Checkup</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Orthopedics">Orthopedics</option>
+              <option value="Oncology">Oncology</option>
+              <option value="Dental Clinic">Dental Clinic</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Room Number *</label>
+            <input type="text" id="new-appt-room" class="form-control" placeholder="E.g. Room 304" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Initial Status</label>
+            <select id="new-appt-status" class="form-control">
+              <option value="Scheduled">Scheduled</option>
+              <option value="Waiting">Waiting</option>
+              <option value="In Progress">In Progress</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Consulting Physician</label>
+          <input type="text" id="new-appt-doctor" class="form-control" value="Dr. Sarah Jenkins" placeholder="Doctor Name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-add-appt-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitAddAppointment()" class="btn btn-primary btn-sm">Schedule Appointment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 5: EDIT APPOINTMENT FULL DETAILS
+       ========================================== -->
+  <div id="staff-edit-appt-details-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-edit" style="color: var(--primary);"></i> Edit Appointment Details</h3>
+        <button onclick="closeModal('staff-edit-appt-details-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-full-appt-id">
+
+        <div class="form-group">
+          <label class="form-label">Patient Full Name *</label>
+          <input type="text" id="edit-full-appt-patient" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Appointment Time *</label>
+            <input type="text" id="edit-full-appt-time" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Department *</label>
+            <input type="text" id="edit-full-appt-dept" class="form-control" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Room Number *</label>
+            <input type="text" id="edit-full-appt-room" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status *</label>
+            <select id="edit-full-appt-status" class="form-control">
+              <option value="Scheduled">Scheduled</option>
+              <option value="Waiting">Waiting</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-edit-appt-details-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitEditAppointmentDetails()" class="btn btn-primary btn-sm">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 6: EDIT SHIFT, WARD & STAT METRICS
+       ========================================== -->
+  <div id="staff-edit-metrics-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-edit" style="color: var(--primary);"></i> Edit Shift & Daily Metrics</h3>
+        <button onclick="closeModal('staff-edit-metrics-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Active Shift *</label>
+            <input type="text" id="edit-staff-shift" class="form-control" placeholder="08:00 AM - 04:00 PM" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Assigned Ward *</label>
+            <input type="text" id="edit-staff-ward" class="form-control" placeholder="Cardiology Ward A" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Today's Patients *</label>
+            <input type="number" id="edit-staff-today-patients" class="form-control" min="0" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Scheduled Appts *</label>
+            <input type="number" id="edit-staff-scheduled-appts" class="form-control" min="0" required>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Admitted Patients *</label>
+            <input type="number" id="edit-staff-admitted-patients" class="form-control" min="0" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pending Reports *</label>
+            <input type="number" id="edit-staff-pending-reports" class="form-control" min="0" required>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-edit-metrics-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitEditStaffMetrics()" class="btn btn-primary btn-sm">Update Metrics</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 7: ADD / UPDATE WARD AVAILABILITY
+       ========================================== -->
+  <div id="staff-manage-wards-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 580px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-procedures" style="color: var(--primary);"></i> Manage Ward Availability</h3>
+        <button onclick="closeModal('staff-manage-wards-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 8px; padding: 14px; margin-bottom: 18px;">
+          <h4 style="font-size: 0.95rem; color: #0b2545; margin-bottom: 10px;">+ Add New Ward</h4>
+          <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr auto; gap: 8px; align-items: end;">
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 700; color: #64748b;">Ward Name</label>
+              <input type="text" id="new-ward-name" class="form-control form-control-sm" placeholder="E.g. Neurology">
+            </div>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 700; color: #64748b;">Occupied</label>
+              <input type="number" id="new-ward-occupied" class="form-control form-control-sm" placeholder="10" min="0">
+            </div>
+            <div>
+              <label style="font-size: 0.78rem; font-weight: 700; color: #64748b;">Total Beds</label>
+              <input type="number" id="new-ward-total" class="form-control form-control-sm" placeholder="20" min="1">
+            </div>
+            <button onclick="submitAddNewWard()" class="btn btn-primary btn-sm">Add</button>
+          </div>
+        </div>
+
+        <h4 style="font-size: 0.95rem; color: #0b2545; margin-bottom: 10px;">Existing Wards</h4>
+        <div id="staff-modal-wards-list" style="max-height: 240px; overflow-y: auto;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-manage-wards-modal')" class="btn btn-outline btn-sm">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 8: ADD UPCOMING TASK
+       ========================================== -->
+  <div id="staff-add-task-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-plus-circle" style="color: var(--primary);"></i> Add Upcoming Task</h3>
+        <button onclick="closeModal('staff-add-task-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Task Description *</label>
+          <input type="text" id="new-task-text" class="form-control" placeholder="E.g. Patient chart review with Dr. Sarah" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Due Time / Note *</label>
+          <input type="text" id="new-task-time" class="form-control" placeholder="E.g. Today at 2:30 PM (Room 304)" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-add-task-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitAddNewTask()" class="btn btn-primary btn-sm">Add Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 9: VIEW ALL UPCOMING TASKS (Functional View All)
+       ========================================== -->
+  <div id="staff-all-tasks-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 640px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-tasks" style="color: #10b981;"></i> All Upcoming Tasks & Events</h3>
+        <button onclick="closeModal('staff-all-tasks-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div style="font-size: 0.88rem; color: var(--text-muted);">Manage and check off clinical shift assignments</div>
+          <button onclick="openAddTaskModal()" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus"></i> New Task
+          </button>
+        </div>
+        <div id="staff-full-tasks-list" style="max-height: 320px; overflow-y: auto;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-all-tasks-modal')" class="btn btn-primary btn-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 10: EDIT STAFF ACCOUNT & PROFILE
+       ========================================== -->
+  <div id="staff-edit-profile-modal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-user-edit" style="color: var(--primary);"></i> Edit My Staff Account</h3>
+        <button onclick="closeModal('staff-edit-profile-modal')" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" id="edit-staff-fullname" class="form-control" placeholder="E.g. Dr. Sarah Jenkins" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address (Read-only)</label>
+          <input type="email" id="edit-staff-email" class="form-control" readonly style="background: #f1f5f9; cursor: not-allowed;">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="text" id="edit-staff-phone" class="form-control" placeholder="+94 77 123 4567">
+        </div>
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Ward / Department</label>
+            <input type="text" id="edit-staff-department" class="form-control" placeholder="Cardiology Ward A">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Active Shift</label>
+            <select id="edit-staff-shift-field" class="form-control">
+              <option value="08:00 AM - 04:00 PM">08:00 AM - 04:00 PM (Morning)</option>
+              <option value="04:00 PM - 12:00 AM">04:00 PM - 12:00 AM (Evening)</option>
+              <option value="12:00 AM - 08:00 AM">12:00 AM - 08:00 AM (Night)</option>
+              <option value="24 Hours On-Call">24 Hours On-Call</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">New Password (leave blank to keep current)</label>
+          <input type="password" id="edit-staff-password" class="form-control" placeholder="Enter new password if changing">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal('staff-edit-profile-modal')" class="btn btn-outline btn-sm">Cancel</button>
+        <button onclick="submitStaffEditProfile()" class="btn btn-primary btn-sm">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
